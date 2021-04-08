@@ -51,6 +51,9 @@ class VentanaVenta(QMainWindow):
         reg.triggered.connect(self.btnReg)
         barra.addAction(reg)
 
+        #VENTANA NUEVO USUARIO
+        self.btn.clicked.connect(self.btnNuevoCliente)
+
     def btnVenta(self):
         pass
 
@@ -67,6 +70,12 @@ class VentanaVenta(QMainWindow):
     def btnReg(self, s):
         self.hide()
         otraventana = VentanaRegistros(self)
+        otraventana.show()
+
+    def btnNuevoCliente(self):
+        print("Hola")
+        self.hide()
+        otraventana = VentanaClienteNuevo(self)
         otraventana.show()
 
 
@@ -223,8 +232,7 @@ class VentanaRegistros(QMainWindow):
 class VentanaClienteNuevo(QMainWindow):
     def __init__(self, parent=None):
         super(VentanaClienteNuevo, self).__init__(parent)
-
-
+        loadUi("ClienteNuevo.ui")
 
 
 app = QApplication(sys.argv)
