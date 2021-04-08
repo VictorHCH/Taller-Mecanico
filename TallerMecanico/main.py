@@ -52,7 +52,7 @@ class VentanaVenta(QMainWindow):
         barra.addAction(reg)
 
         #VENTANA NUEVO USUARIO
-        self.btn.clicked.connect(self.btnNuevoCliente())
+        self.btn.clicked.connect(self.btnNuevoCliente)
 
     def btnVenta(self):
         pass
@@ -234,7 +234,7 @@ class VentanaRegistros(QMainWindow):
 class VentanaClienteNuevo(QMainWindow):
     def __init__(self, parent=None):
         super(VentanaClienteNuevo, self).__init__(parent)
-        loadUi("ClienteNuevo.ui")
+        loadUi('RegistroVentas.ui', self)
 
 
 app = QApplication(sys.argv)
