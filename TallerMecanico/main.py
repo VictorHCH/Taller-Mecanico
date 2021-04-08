@@ -52,7 +52,7 @@ class VentanaVenta(QMainWindow):
         barra.addAction(reg)
 
         #VENTANA NUEVO USUARIO
-        self.btn.clicked.connect(self.btnNuevoCliente())
+        self.btn.clicked.connect(self.btnNuevoCliente)
 
     def btnVenta(self):
         pass
