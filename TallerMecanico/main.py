@@ -4,7 +4,7 @@ from PyQt5.uic import loadUi
 from PyQt5.QtGui import QPixmap, QIcon
 from PyQt5.QtCore import QSize, Qt
 from PyQt5.QtSql import QSqlQuery, QSqlQueryModel, QSqlDatabase, QSqlTableModel
-
+#Ejemplo de cambio
 
 class VentanaPrincipal(QMainWindow):
     def __init__(self, parent=None):
