@@ -1,8 +1,8 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow, QAction, QToolBar, QTableView, QVBoxLayout, QLineEdit, QHBoxLayout, QWidget
+from PyQt5.QtWidgets import QApplication, QMainWindow, QAction, QToolBar, QTableView, QVBoxLayout, QLineEdit, QHBoxLayout, QWidget, QPushButton
 from PyQt5.uic import loadUi
 from PyQt5.QtGui import QPixmap, QIcon
-from PyQt5.QtCore import QSize, Qt
+from PyQt5.QtCore import QSize, Qt, QRect
 from PyQt5.QtSql import QSqlQuery, QSqlQueryModel, QSqlDatabase, QSqlTableModel
 
 
@@ -148,16 +148,24 @@ class VentanaInventario(QMainWindow):
         widget = QWidget()
         lay1 = QVBoxLayout()
 
+        lay2 = QHBoxLayout()
+
         self.nombreProducto = QLineEdit()
+        self.nombreProducto.geometry(QSize(281, 31))
         self.nombreProducto.setPlaceholderText("Nombre del Producto")
         self.nombreProducto.textChanged.connect(self.actualizarQuery)
 
+        self.btn = QPushButton()
+
         lay1.addWidget(self.nombreProducto)
+        lay2.addWidget(self.nombreProducto)
+        lay2.addWidget(self.btn)
 
         self.tabla = QTableView()
 
         lay1.addWidget(self.tabla)
         widget.setLayout(lay1)
+        widget.setLayout(lay2)
 
         self.modelo = QSqlQueryModel()
         self.tabla.setModel(self.modelo)
@@ -201,7 +209,7 @@ class VentanaInventario(QMainWindow):
         barra.addAction(reg)
 
         #Agregar producto
-        #self.btn.clicked.connect(self.agregarProducto)
+        self.btn.clicked.connect(self.agregarProducto)
 
         #Pruebas
 
@@ -223,9 +231,9 @@ class VentanaInventario(QMainWindow):
         otraventana = VentanaRegistros(self)
         otraventana.show()
 
-    #def agregarProducto(self):
-        #otraventana = VentanaRegistroProducto(self)
-        #otraventana.show()
+    def agregarProducto(self):
+        otraventana = VentanaRegistroProducto(self)
+        otraventana.show()
 
     def actualizarQuery(self):
         pista_nombreProducto = self.nombreProducto .text()
