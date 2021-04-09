@@ -11,7 +11,11 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string/>
+   <string> </string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>m.ico</normaloff>m.ico</iconset>
   </property>
   <property name="styleSheet">
    <string notr="true">background-color: rgb(199, 199, 199);</string>
