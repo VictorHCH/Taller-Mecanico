@@ -147,19 +147,17 @@ class VentanaInventario(QMainWindow):
         #loadUi('Inventario.ui', self)
         widget = QWidget()
         lay1 = QVBoxLayout()
-
         lay2 = QHBoxLayout()
 
         self.nombreProducto = QLineEdit()
-        self.nombreProducto.geometry(QSize(281, 31))
         self.nombreProducto.setPlaceholderText("Nombre del Producto")
         self.nombreProducto.textChanged.connect(self.actualizarQuery)
 
-        self.btn = QPushButton()
+        self.btn = QPushButton("+")
 
-        lay1.addWidget(self.nombreProducto)
         lay2.addWidget(self.nombreProducto)
         lay2.addWidget(self.btn)
+        lay1.addLayout(lay2)
 
         self.tabla = QTableView()
 
