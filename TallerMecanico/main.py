@@ -4,7 +4,6 @@ from PyQt5.uic import loadUi
 from PyQt5.QtGui import QPixmap, QIcon
 from PyQt5.QtCore import QSize, Qt
 from PyQt5.QtSql import QSqlQuery, QSqlQueryModel, QSqlDatabase, QSqlTableModel
-#Ejemplo de cambio
 
 class VentanaPrincipal(QMainWindow):
     def __init__(self, parent=None):
@@ -54,6 +53,9 @@ class VentanaVenta(QMainWindow):
         #VENTANA NUEVO USUARIO
         self.btn.clicked.connect(self.btnNuevoCliente)
 
+        #Ventana agregar concepto
+        self.pushButton_3.clicked.connect(self.agregarConcepto)
+
     def btnVenta(self):
         pass
 
@@ -74,6 +76,10 @@ class VentanaVenta(QMainWindow):
 
     def btnNuevoCliente(self):
         otraventana = VentanaClienteNuevo(self)
+        otraventana.show()
+
+    def agregarConcepto(self):
+        otraventana = VentanaProductos(self)
         otraventana.show()
 
 
@@ -194,6 +200,9 @@ class VentanaInventario(QMainWindow):
         reg.triggered.connect(self.btnReg)
         barra.addAction(reg)
 
+        #Agregar producto
+        #self.btn.clicked.connect(self.agregarProducto)
+
         #Pruebas
 
     def btnVenta(self):
@@ -213,6 +222,10 @@ class VentanaInventario(QMainWindow):
         self.hide()
         otraventana = VentanaRegistros(self)
         otraventana.show()
+
+    #def agregarProducto(self):
+        #otraventana = VentanaRegistroProducto(self)
+        #otraventana.show()
 
     def actualizarQuery(self):
         pista_nombreProducto = self.nombreProducto .text()
@@ -276,6 +289,18 @@ class VentanaClienteNuevo(QMainWindow):
     def __init__(self, parent=None):
         super(VentanaClienteNuevo, self).__init__(parent)
         loadUi("ClienteNuevo.ui", self)
+
+
+class VentanaProductos(QMainWindow):
+    def __init__(self, parent=None):
+        super(VentanaProductos, self).__init__(parent)
+        loadUi("Productos.ui", self)
+
+
+class VentanaRegistroProducto(QMainWindow):
+    def __init__(self, parent=None):
+        super(VentanaRegistroProducto, self).__init__(parent)
+        loadUi("Registros.ui", self)
 
 
 app = QApplication(sys.argv)
