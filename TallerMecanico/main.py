@@ -6,7 +6,6 @@ from PyQt5.QtCore import QSize, Qt
 from PyQt5.QtSql import QSqlQuery, QSqlQueryModel, QSqlDatabase, QSqlTableModel
 
 
-
 class VentanaPrincipal(QMainWindow):
     def __init__(self, parent=None):
         super(VentanaPrincipal, self).__init__(parent)
@@ -180,7 +179,7 @@ class VentanaInventario(QMainWindow):
         )
         self.actualizarQuery()
 
-        self.setMinimumSize(QSize(1000, 600))
+        self.setMinimumSize(QSize(800, 600))
         self.setCentralWidget(widget)
 
 
@@ -212,9 +211,6 @@ class VentanaInventario(QMainWindow):
         barra.addAction(reg)
 
         #Pruebas
-
-
-
 
     def btnVenta(self):
         self.hide()
@@ -303,10 +299,10 @@ class VentanaClienteNuevo(QMainWindow):
         loadUi("ClienteNuevo.ui", self)
 
 
+app = QApplication(sys.argv)
 dba = QSqlDatabase("QSQLITE")
 dba.setDatabaseName("canciones.db")
 dba.open()
-app = QApplication(sys.argv)
-main = VentanaPrincipal()
-main.show()
-sys.exit(app.exec_())
+win = VentanaPrincipal()
+win.show()
+app.exec_()
