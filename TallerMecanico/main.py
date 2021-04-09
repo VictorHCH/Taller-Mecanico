@@ -140,30 +140,18 @@ class VentanaInventario(QMainWindow):
         super(VentanaInventario, self).__init__(parent)
         #loadUi('Inventario.ui', self)
         widget = QWidget()
-        lay1 = QHBoxLayout()
+        lay1 = QVBoxLayout()
 
-        self.pista = QLineEdit()
-        self.pista.setPlaceholderText("Nombre de la pista")
-        self.pista.textChanged.connect(self.actualizarQuery)
+        self.nombreProducto = QLineEdit()
+        self.nombreProducto.setPlaceholderText("Nombre del Producto")
+        self.nombreProducto.textChanged.connect(self.actualizarQuery)
 
-        self.compositor = QLineEdit()
-        self.compositor.setPlaceholderText("Nombre del compositor")
-        self.compositor.textChanged.connect(self.actualizarQuery)
-
-        self.album = QLineEdit()
-        self.album.setPlaceholderText("Nombre del album")
-        self.album.textChanged.connect(self.actualizarQuery)
-
-        lay1.addWidget(self.pista)
-        lay1.addWidget(self.compositor)
-        lay1.addWidget(self.album)
-        lay2 = QVBoxLayout()
-        lay2.addLayout(lay1)
+        lay1.addWidget(self.nombreProducto)
 
         self.tabla = QTableView()
 
-        lay2.addWidget(self.tabla)
-        widget.setLayout(lay2)
+        lay1.addWidget(self.tabla)
+        widget.setLayout(lay1)
 
         self.modelo = QSqlQueryModel()
         self.tabla.setModel(self.modelo)
@@ -173,16 +161,12 @@ class VentanaInventario(QMainWindow):
         self.query.prepare(
             "SELECT pista.nombre, compositor, album.nombre FROM pista "
             "INNER JOIN album ON pista.idAlbum_Album = album.idAlbum WHERE "
-            "pista.nombre LIKE '%' || :pista_nombre || '%' AND "
-            "pista.compositor LIKE '%' || :pista_compositor || '%' AND "
-            "album.nombre LIKE '%' || :album_nombre || '%'"
+            "pista.compositor LIKE '%' || :pista_nombreProducto || '%'"
         )
         self.actualizarQuery()
 
         self.setMinimumSize(QSize(800, 600))
         self.setCentralWidget(widget)
-
-
 
         barra = QToolBar()
         barra.setIconSize(QSize(30, 30))
@@ -231,13 +215,8 @@ class VentanaInventario(QMainWindow):
         otraventana.show()
 
     def actualizarQuery(self):
-        pista_nombre = self.pista.text()
-        pista_compositor = self.compositor.text()
-        album_nombre = self.album.text()
-
-        self.query.bindValue(":pista_nombre", pista_nombre)
-        self.query.bindValue(":pista_compositor", pista_compositor)
-        self.query.bindValue(":album_nombre", album_nombre)
+        pista_nombreProducto = self.nombreProducto .text()
+        self.query.bindValue(":pista_nombreProducto", pista_nombreProducto)
 
         self.query.exec_()
         self.modelo.setQuery(self.query)
