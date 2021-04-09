@@ -5,6 +5,7 @@ from PyQt5.QtGui import QPixmap, QIcon
 from PyQt5.QtCore import QSize, Qt
 from PyQt5.QtSql import QSqlQuery, QSqlQueryModel, QSqlDatabase, QSqlTableModel
 
+
 class VentanaPrincipal(QMainWindow):
     def __init__(self, parent=None):
         super(VentanaPrincipal, self).__init__(parent)
@@ -136,7 +137,6 @@ class VentanaClientes(QMainWindow):
         otraventana.show()
 
     def btnNuevoCliente(self):
-        self.hide()
         otraventana = VentanaClienteNuevo(self)
         otraventana.show()
 
