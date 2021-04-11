@@ -14,19 +14,19 @@ class VentanaPrincipal(QMainWindow):
         self.lb.setPixmap(QPixmap("Fondo.png"))
         self.lb.setScaledContents(True)
 
-        self.tiempo = 2
+        self.tiempo = 1
         self.timer = QTimer(self)
-        self.timer.start()
-        self.timer.timeout(self.showTime)
+        self.timer.timeout.connect(self.showTime)
         self.timer.setInterval(1000)
         self.timee = self.tiempo
+        self.timer.start()
 
     def showTime(self):
         self.timee -= 1
         if self.timee < 0:
             self.timer.stop()
             for i in range(101):
-                time.sleep(0.05)
+                time.sleep(0.015)
                 self.pb.setValue(i)
             self.hide()
             otraventana = VentanaVenta()
