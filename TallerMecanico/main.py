@@ -22,7 +22,10 @@ class VentanaPrincipal(QMainWindow):
         self.timer.start(100)
 
     def barraP(self):
-        self.pb.setValue(self.pb.value() + 5)
+        for i in range(101):
+            time.sleep(0.07)
+            self.pb.setValue(i)
+            self.pb.value()+1
         if self.pb.value() == 100:
             self.timer.stop()
             self.pb.setValue(0)
