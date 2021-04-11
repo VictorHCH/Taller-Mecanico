@@ -1,8 +1,9 @@
 import sys
+import time
 from PyQt5.QtWidgets import QApplication, QMainWindow, QAction, QToolBar, QTableView, QVBoxLayout, QLineEdit, QHBoxLayout, QWidget, QPushButton
 from PyQt5.uic import loadUi
 from PyQt5.QtGui import QPixmap, QIcon
-from PyQt5.QtCore import QSize, Qt, QRect
+from PyQt5.QtCore import QSize, Qt, QRect, QTimer
 from PyQt5.QtSql import QSqlQuery, QSqlQueryModel, QSqlDatabase, QSqlTableModel
 
 
@@ -10,14 +11,26 @@ class VentanaPrincipal(QMainWindow):
     def __init__(self, parent=None):
         super(VentanaPrincipal, self).__init__(parent)
         loadUi('ventanas\Inicio.ui', self)
-        self.btn.clicked.connect(self.VentanaVenta)
         self.lb.setPixmap(QPixmap("Fondo.png"))
         self.lb.setScaledContents(True)
 
-    def VentanaVenta(self):
-        self.hide()
-        otraventana = VentanaVenta(self)
-        otraventana.show()
+        self.tiempo = 2
+        self.timer = QTimer(self)
+        self.timer.start()
+        self.timer.timeout(self.showTime)
+        self.timer.setInterval(1000)
+        self.timee = self.tiempo
+
+    def showTime(self):
+        self.timee -= 1
+        if self.timee < 0:
+            self.timer.stop()
+            for i in range(101):
+                time.sleep(0.05)
+                self.pb.setValue(i)
+            self.hide()
+            otraventana = VentanaVenta()
+            otraventana.show()
 
 
 class VentanaVenta(QMainWindow):
