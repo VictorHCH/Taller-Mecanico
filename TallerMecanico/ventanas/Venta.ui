@@ -20,7 +20,7 @@
   </property>
   <property name="windowIcon">
    <iconset>
-    <normaloff>m.ico</normaloff>m.ico</iconset>
+    <normaloff>../iconos/m.ico</normaloff>../iconos/m.ico</iconset>
   </property>
   <property name="styleSheet">
    <string notr="true">background-color: rgb(199, 199, 199);</string>
@@ -30,7 +30,7 @@
     <property name="geometry">
      <rect>
       <x>70</x>
-      <y>40</y>
+      <y>20</y>
       <width>61</width>
       <height>16</height>
      </rect>
@@ -54,9 +54,9 @@
     <property name="geometry">
      <rect>
       <x>70</x>
-      <y>90</y>
+      <y>70</y>
       <width>471</width>
-      <height>101</height>
+      <height>91</height>
      </rect>
     </property>
     <property name="font">
@@ -78,7 +78,7 @@
     <property name="geometry">
      <rect>
       <x>70</x>
-      <y>240</y>
+      <y>200</y>
       <width>81</width>
       <height>16</height>
      </rect>
@@ -92,7 +92,7 @@
      </font>
     </property>
     <property name="text">
-     <string>Vehiculo</string>
+     <string>Vehículo</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
@@ -102,7 +102,7 @@
     <property name="geometry">
      <rect>
       <x>70</x>
-      <y>300</y>
+      <y>250</y>
       <width>91</width>
       <height>31</height>
      </rect>
@@ -126,20 +126,41 @@
     <property name="geometry">
      <rect>
       <x>190</x>
-      <y>31</y>
+      <y>11</y>
       <width>281</width>
       <height>31</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>ITC Avant Garde Std Bk Cn</family>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 255, 255);</string>
     </property>
    </widget>
    <widget class="QPushButton" name="btn">
     <property name="geometry">
      <rect>
       <x>500</x>
-      <y>30</y>
+      <y>10</y>
       <width>41</width>
       <height>31</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>ITC Avant Garde Std Bk Cn</family>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(155, 155, 155);
+color: rgb(206, 18, 18);</string>
     </property>
     <property name="text">
      <string>+</string>
@@ -149,10 +170,22 @@
     <property name="geometry">
      <rect>
       <x>170</x>
-      <y>300</y>
+      <y>250</y>
       <width>41</width>
       <height>31</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>ITC Avant Garde Std Bk Cn</family>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(155, 155, 155);
+color: rgb(206, 18, 18);</string>
     </property>
     <property name="text">
      <string>+</string>
@@ -162,7 +195,7 @@
     <property name="geometry">
      <rect>
       <x>510</x>
-      <y>550</y>
+      <y>470</y>
       <width>55</width>
       <height>16</height>
      </rect>
@@ -186,7 +219,7 @@
     <property name="geometry">
      <rect>
       <x>670</x>
-      <y>550</y>
+      <y>470</y>
       <width>55</width>
       <height>16</height>
      </rect>
@@ -210,20 +243,62 @@
     <property name="geometry">
      <rect>
       <x>190</x>
-      <y>230</y>
+      <y>190</y>
       <width>281</width>
       <height>31</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>ITC Avant Garde Std Bk Cn</family>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 255, 255);</string>
     </property>
    </widget>
    <widget class="QTableView" name="tableView">
     <property name="geometry">
      <rect>
       <x>80</x>
-      <y>360</y>
+      <y>310</y>
       <width>641</width>
-      <height>161</height>
+      <height>131</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>ITC Avant Garde Std Bk Cn</family>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 255, 255);</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton">
+    <property name="geometry">
+     <rect>
+      <x>522</x>
+      <y>510</y>
+      <width>201</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>9</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(155, 155, 155);
+color: rgb(206, 18, 18);</string>
+    </property>
+    <property name="text">
+     <string>Registrar venta</string>
     </property>
    </widget>
   </widget>

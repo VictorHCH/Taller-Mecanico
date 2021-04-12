@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>Cliente nuevo</string>
   </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>../iconos/m.ico</normaloff>../iconos/m.ico</iconset>
+  </property>
   <property name="styleSheet">
    <string notr="true">background-color: rgb(199, 199, 199);</string>
   </property>
@@ -30,8 +34,8 @@
      <font>
       <family>ITC Avant Garde Std Bk Cn</family>
       <pointsize>8</pointsize>
-      <weight>50</weight>
-      <bold>false</bold>
+      <weight>75</weight>
+      <bold>true</bold>
      </font>
     </property>
     <property name="text">
@@ -51,8 +55,8 @@
      <font>
       <family>ITC Avant Garde Std Bk Cn</family>
       <pointsize>8</pointsize>
-      <weight>50</weight>
-      <bold>false</bold>
+      <weight>75</weight>
+      <bold>true</bold>
      </font>
     </property>
     <property name="text">
@@ -72,8 +76,8 @@
      <font>
       <family>ITC Avant Garde Std Bk Cn</family>
       <pointsize>8</pointsize>
-      <weight>50</weight>
-      <bold>false</bold>
+      <weight>75</weight>
+      <bold>true</bold>
      </font>
     </property>
     <property name="text">
@@ -93,8 +97,8 @@
      <font>
       <family>ITC Avant Garde Std Bk Cn</family>
       <pointsize>8</pointsize>
-      <weight>50</weight>
-      <bold>false</bold>
+      <weight>75</weight>
+      <bold>true</bold>
      </font>
     </property>
     <property name="text">
@@ -114,8 +118,8 @@
      <font>
       <family>ITC Avant Garde Std Bk Cn</family>
       <pointsize>8</pointsize>
-      <weight>50</weight>
-      <bold>false</bold>
+      <weight>75</weight>
+      <bold>true</bold>
      </font>
     </property>
     <property name="text">
@@ -135,8 +139,8 @@
      <font>
       <family>ITC Avant Garde Std Bk Cn</family>
       <pointsize>8</pointsize>
-      <weight>50</weight>
-      <bold>false</bold>
+      <weight>75</weight>
+      <bold>true</bold>
      </font>
     </property>
     <property name="text">
@@ -153,6 +157,15 @@ exterior</string>
       <height>31</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <family>ITC Avant Garde Std Bk Cn</family>
+      <pointsize>8</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 255, 255);</string>
+    </property>
    </widget>
    <widget class="QLineEdit" name="lineEdit_2">
     <property name="geometry">
@@ -162,6 +175,15 @@ exterior</string>
       <width>231</width>
       <height>31</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>ITC Avant Garde Std Bk Cn</family>
+      <pointsize>8</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 255, 255);</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="lineEdit_3">
@@ -173,6 +195,15 @@ exterior</string>
       <height>31</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <family>ITC Avant Garde Std Bk Cn</family>
+      <pointsize>8</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 255, 255);</string>
+    </property>
    </widget>
    <widget class="QLineEdit" name="lineEdit_4">
     <property name="geometry">
@@ -182,6 +213,15 @@ exterior</string>
       <width>231</width>
       <height>31</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>ITC Avant Garde Std Bk Cn</family>
+      <pointsize>8</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 255, 255);</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="lineEdit_5">
@@ -193,6 +233,15 @@ exterior</string>
       <height>31</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <family>ITC Avant Garde Std Bk Cn</family>
+      <pointsize>8</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 255, 255);</string>
+    </property>
    </widget>
    <widget class="QLineEdit" name="lineEdit_6">
     <property name="geometry">
@@ -202,6 +251,15 @@ exterior</string>
       <width>231</width>
       <height>31</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>ITC Avant Garde Std Bk Cn</family>
+      <pointsize>8</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 255, 255);</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_8">
@@ -217,8 +275,8 @@ exterior</string>
      <font>
       <family>ITC Avant Garde Std Bk Cn</family>
       <pointsize>8</pointsize>
-      <weight>50</weight>
-      <bold>false</bold>
+      <weight>75</weight>
+      <bold>true</bold>
      </font>
     </property>
     <property name="text">
@@ -238,8 +296,8 @@ exterior</string>
      <font>
       <family>ITC Avant Garde Std Bk Cn</family>
       <pointsize>8</pointsize>
-      <weight>50</weight>
-      <bold>false</bold>
+      <weight>75</weight>
+      <bold>true</bold>
      </font>
     </property>
     <property name="text">
@@ -255,6 +313,15 @@ exterior</string>
       <height>31</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <family>ITC Avant Garde Std Bk Cn</family>
+      <pointsize>8</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 255, 255);</string>
+    </property>
    </widget>
    <widget class="QLabel" name="label_11">
     <property name="geometry">
@@ -269,8 +336,8 @@ exterior</string>
      <font>
       <family>ITC Avant Garde Std Bk Cn</family>
       <pointsize>8</pointsize>
-      <weight>50</weight>
-      <bold>false</bold>
+      <weight>75</weight>
+      <bold>true</bold>
      </font>
     </property>
     <property name="text">
@@ -286,6 +353,15 @@ exterior</string>
       <height>31</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <family>ITC Avant Garde Std Bk Cn</family>
+      <pointsize>8</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 255, 255);</string>
+    </property>
    </widget>
    <widget class="QLabel" name="label_12">
     <property name="geometry">
@@ -300,8 +376,8 @@ exterior</string>
      <font>
       <family>ITC Avant Garde Std Bk Cn</family>
       <pointsize>8</pointsize>
-      <weight>50</weight>
-      <bold>false</bold>
+      <weight>75</weight>
+      <bold>true</bold>
      </font>
     </property>
     <property name="text">
@@ -321,8 +397,8 @@ exterior</string>
      <font>
       <family>ITC Avant Garde Std Bk Cn</family>
       <pointsize>8</pointsize>
-      <weight>50</weight>
-      <bold>false</bold>
+      <weight>75</weight>
+      <bold>true</bold>
      </font>
     </property>
     <property name="text">
@@ -339,6 +415,15 @@ interior</string>
       <height>31</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <family>ITC Avant Garde Std Bk Cn</family>
+      <pointsize>8</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 255, 255);</string>
+    </property>
    </widget>
    <widget class="QComboBox" name="comboBox">
     <property name="geometry">
@@ -349,6 +434,15 @@ interior</string>
       <height>31</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <family>ITC Avant Garde Std Bk Cn</family>
+      <pointsize>8</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 255, 255);</string>
+    </property>
    </widget>
    <widget class="QComboBox" name="comboBox_2">
     <property name="geometry">
@@ -358,6 +452,15 @@ interior</string>
       <width>231</width>
       <height>31</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>ITC Avant Garde Std Bk Cn</family>
+      <pointsize>8</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 255, 255);</string>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButton">
@@ -376,6 +479,10 @@ interior</string>
       <weight>75</weight>
       <bold>true</bold>
      </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(155, 155, 155);
+color: rgb(206, 18, 18);</string>
     </property>
     <property name="text">
      <string>Aceptar</string>
@@ -398,12 +505,15 @@ interior</string>
       <bold>true</bold>
      </font>
     </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(155, 155, 155);
+color: rgb(206, 18, 18);</string>
+    </property>
     <property name="text">
      <string>Cancelar</string>
     </property>
    </widget>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <resources/>
  <connections/>

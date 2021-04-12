@@ -23,7 +23,7 @@ class VentanaPrincipal(QMainWindow):
 
     def barraP(self):
         for i in range(101):
-            time.sleep(0.07)
+            time.sleep(0.02)
             self.pb.setValue(i)
             self.pb.value()+1
         if self.pb.value() == 100:
@@ -65,6 +65,20 @@ class VentanaVenta(QMainWindow):
         reg.triggered.connect(self.btnReg)
         barra.addAction(reg)
 
+        barra.addSeparator()
+
+        self.modelo = QSqlQueryModel()
+        self.tableView.setModel(self.modelo)
+
+        self.query = QSqlQuery(db=dba)
+
+        self.query.prepare(
+            "SELECT * FROM Concepto"
+        )
+        self.actualizarQuery()
+
+        self.modelo.setHeaderData(0, Qt.Horizontal, "Número")
+
         #VENTANA NUEVO USUARIO
         self.btn.clicked.connect(self.btnNuevoCliente)
 
@@ -96,6 +110,10 @@ class VentanaVenta(QMainWindow):
     def agregarConcepto(self):
         otraventana = VentanaProductos(self)
         otraventana.show()
+
+    def actualizarQuery(self):
+        self.query.exec_()
+        self.modelo.setQuery(self.query)
 
 
 class VentanaClientes(QMainWindow):
@@ -129,6 +147,28 @@ class VentanaClientes(QMainWindow):
         reg.triggered.connect(self.btnReg)
         barra.addAction(reg)
 
+        barra.addSeparator()
+
+        self.lineEdit.setPlaceholderText("Nombre del cliente")
+        self.lineEdit.textChanged.connect(self.actualizarQuery)
+
+        self.modelo = QSqlQueryModel()
+        self.tableView.setModel(self.modelo)
+
+        self.query = QSqlQuery(db=dba)
+
+        self.query.prepare(
+            "SELECT * FROM Cliente WHERE "
+            "razonSocial LIKE '%' || :nombreCliente || '%'"
+        )
+        self.actualizarQuery()
+
+        self.modelo.setHeaderData(0, Qt.Horizontal, "RFC")
+        self.modelo.setHeaderData(1, Qt.Horizontal, "Razón social")
+        self.modelo.setHeaderData(2, Qt.Horizontal, "Teléfono")
+        self.modelo.setHeaderData(3, Qt.Horizontal, "Correo")
+        self.modelo.setHeaderData(4, Qt.Horizontal, "Dirección")
+
         # VENTANA NUEVO USUARIO
         self.btn.clicked.connect(self.btnNuevoCliente)
 
@@ -154,44 +194,18 @@ class VentanaClientes(QMainWindow):
         otraventana = VentanaClienteNuevo(self)
         otraventana.show()
 
+    def actualizarQuery(self):
+        nombreCliente = self.lineEdit.text()
+        self.query.bindValue(":nombreCliente", nombreCliente)
+
+        self.query.exec_()
+        self.modelo.setQuery(self.query)
+
 
 class VentanaInventario(QMainWindow):
     def __init__(self, parent=None):
         super(VentanaInventario, self).__init__(parent)
-        #loadUi('ventanas\Inventario.ui', self)
-        widget = QWidget()
-        lay1 = QVBoxLayout()
-        lay2 = QHBoxLayout()
-
-        self.nombreProducto = QLineEdit()
-        self.nombreProducto.setPlaceholderText("Nombre del Producto")
-        self.nombreProducto.textChanged.connect(self.actualizarQuery)
-
-        self.btn = QPushButton("+")
-
-        lay2.addWidget(self.nombreProducto)
-        lay2.addWidget(self.btn)
-        lay1.addLayout(lay2)
-
-        self.tabla = QTableView()
-
-        lay1.addWidget(self.tabla)
-        widget.setLayout(lay1)
-        widget.setLayout(lay2)
-
-        self.modelo = QSqlQueryModel()
-        self.tabla.setModel(self.modelo)
-
-        self.query = QSqlQuery(db=dba)
-
-        self.query.prepare(
-            "SELECT * FROM Refaccion WHERE "
-            "nombre LIKE '%' || :nombreProducto || '%'"
-        )
-        self.actualizarQuery()
-
-        self.setMinimumSize(QSize(800, 600))
-        self.setCentralWidget(widget)
+        loadUi('ventanas\Inventario.ui', self)
 
         barra = QToolBar()
         barra.setIconSize(QSize(30, 30))
@@ -219,8 +233,30 @@ class VentanaInventario(QMainWindow):
         reg.triggered.connect(self.btnReg)
         barra.addAction(reg)
 
+        barra.addSeparator()
+
+        self.lineEdit.setPlaceholderText("Nombre del producto")
+        self.lineEdit.textChanged.connect(self.actualizarQuery)
+
+        self.modelo = QSqlQueryModel()
+        self.tableView.setModel(self.modelo)
+
+        self.query = QSqlQuery(db=dba)
+
+        self.query.prepare(
+            "SELECT * FROM Refaccion WHERE "
+            "nombre LIKE '%' || :nombreProducto || '%'"
+        )
+        self.actualizarQuery()
+
+        self.modelo.setHeaderData(0, Qt.Horizontal, "Id producto")
+        self.modelo.setHeaderData(1, Qt.Horizontal, "Nombre")
+        self.modelo.setHeaderData(2, Qt.Horizontal, "Precio")
+        self.modelo.setHeaderData(3, Qt.Horizontal, "Cantidad")
+        self.modelo.setHeaderData(4, Qt.Horizontal, "Unidad de medida")
+
         #Agregar producto
-        self.btn.clicked.connect(self.agregarProducto)
+        self.btn_2.clicked.connect(self.agregarProducto)
 
         #Pruebas
 
@@ -247,7 +283,7 @@ class VentanaInventario(QMainWindow):
         otraventana.show()
 
     def actualizarQuery(self):
-        nombreProducto = self.nombreProducto .text()
+        nombreProducto = self.lineEdit.text()
         self.query.bindValue(":nombreProducto", nombreProducto)
 
         self.query.exec_()
@@ -285,6 +321,26 @@ class VentanaRegistros(QMainWindow):
         reg.triggered.connect(self.btnReg)
         barra.addAction(reg)
 
+        barra.addSeparator()
+
+        #fechas = self.lineEdit_2.date()
+
+        self.lineEdit.setPlaceholderText("Nombre del cliente")
+        self.lineEdit_2.setPlaceholderText("Fecha")
+        self.lineEdit.textChanged.connect(self.actualizarQuery)
+
+        self.modelo = QSqlQueryModel()
+        self.tableView.setModel(self.modelo)
+
+        self.query = QSqlQuery(db=dba)
+
+        self.query.prepare(
+            "SELECT * FROM Venta WHERE "
+            "rfc LIKE '%' || :nombreCliente || '%' AND "
+            "fecha LIKE '%' || :fecha || '%'"
+        )
+        self.actualizarQuery()
+
     def btnVenta(self):
         self.hide()
         otraventana = VentanaVenta(self)
@@ -303,11 +359,26 @@ class VentanaRegistros(QMainWindow):
     def btnReg(self, s):
         pass
 
+    def actualizarQuery(self):
+        nombreCliente = self.lineEdit.text()
+        self.query.bindValue(":nombreCliente", nombreCliente)
+
+        fecha = self.lineEdit_2.text()
+        self.query.bindValue(":fecha", fecha)
+
+        self.query.exec_()
+        self.modelo.setQuery(self.query)
+
 
 class VentanaClienteNuevo(QMainWindow):
     def __init__(self, parent=None):
         super(VentanaClienteNuevo, self).__init__(parent)
         loadUi("ventanas\ClienteNuevo.ui", self)
+
+        self.pushButton_2.clicked.connect(self.cancelar)
+
+    def cancelar(self):
+        self.hide()
 
 
 class VentanaProductos(QMainWindow):
@@ -315,11 +386,40 @@ class VentanaProductos(QMainWindow):
         super(VentanaProductos, self).__init__(parent)
         loadUi("ventanas\Productos.ui", self)
 
+        self.lineEdit.setPlaceholderText("Nombre del producto")
+        self.lineEdit.textChanged.connect(self.actualizarQuery)
+
+        self.modelo = QSqlQueryModel()
+        self.tableView.setModel(self.modelo)
+
+        self.query = QSqlQuery(db=dba)
+
+        self.query.prepare(
+            "SELECT nombre, precio FROM Refaccion WHERE "
+            "nombre LIKE '%' || :nombreProducto || '%'"
+        )
+        self.actualizarQuery()
+
+        self.modelo.setHeaderData(0, Qt.Horizontal, "Nombre")
+        self.modelo.setHeaderData(1, Qt.Horizontal, "Precio")
+
+    def actualizarQuery(self):
+        nombreProducto = self.lineEdit.text()
+        self.query.bindValue(":nombreProducto", nombreProducto)
+
+        self.query.exec_()
+        self.modelo.setQuery(self.query)
+
 
 class VentanaRegistroProducto(QMainWindow):
     def __init__(self, parent=None):
         super(VentanaRegistroProducto, self).__init__(parent)
         loadUi("ventanas\Registros.ui", self)
+
+        self.pushButton_2.clicked.connect(self.cancelar)
+
+    def cancelar(self):
+        self.hide()
 
 
 app = QApplication(sys.argv)
