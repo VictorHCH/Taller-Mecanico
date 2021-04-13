@@ -159,15 +159,9 @@ class VentanaClientes(QMainWindow):
 
         self.query.prepare(
             "SELECT * FROM Cliente WHERE "
-            "razonSocial LIKE '%' || :nombreCliente || '%'"
+            "nombre LIKE '%' || :nombreCliente || '%'"
         )
         self.actualizarQuery()
-
-        self.modelo.setHeaderData(0, Qt.Horizontal, "RFC")
-        self.modelo.setHeaderData(1, Qt.Horizontal, "Razón social")
-        self.modelo.setHeaderData(2, Qt.Horizontal, "Teléfono")
-        self.modelo.setHeaderData(3, Qt.Horizontal, "Correo")
-        self.modelo.setHeaderData(4, Qt.Horizontal, "Dirección")
 
         # VENTANA NUEVO USUARIO
         self.btn.clicked.connect(self.btnNuevoCliente)
