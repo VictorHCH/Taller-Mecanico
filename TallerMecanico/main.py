@@ -70,15 +70,21 @@ class VentanaVenta(QMainWindow):
 
         self.modelo = QSqlQueryModel()
         self.tableView.setModel(self.modelo)
+        self.tableView.setWordWrap(True)
+        self.tableView.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        self.tableView.verticalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
 
         self.query = QSqlQuery(db=dba)
 
         self.query.prepare(
-            "SELECT idConcepto, refaccion, cantidad, importe, numVenta FROM Concepto"
+            "SELECT idConcepto, refaccion, cantidad, importe FROM Concepto"
         )
         self.actualizarQuery()
 
-        self.modelo.setHeaderData(0, Qt.Horizontal, "Número")
+        self.modelo.setHeaderData(0, Qt.Horizontal, "#")
+        self.modelo.setHeaderData(1, Qt.Horizontal, "Concepto")
+        self.modelo.setHeaderData(2, Qt.Horizontal, "Cantidad")
+        self.modelo.setHeaderData(3, Qt.Horizontal, "Importe")
 
         #VENTANA NUEVO USUARIO
         self.btn.clicked.connect(self.btnNuevoCliente)
@@ -156,7 +162,7 @@ class VentanaClientes(QMainWindow):
         self.modelo = QSqlQueryModel()
         self.tableView.setModel(self.modelo)
         self.tableView.setWordWrap(True)
-        self.tableView.horizontalHeader().setStretchLastSection(True)
+        self.tableView.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         self.tableView.verticalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
 
         self.query = QSqlQuery(db=dba)
@@ -166,6 +172,10 @@ class VentanaClientes(QMainWindow):
             "nombre LIKE '%' || :nombreCliente || '%'"
         )
         self.actualizarQuery()
+
+        self.modelo.setHeaderData(0, Qt.Horizontal, "#")
+        self.modelo.setHeaderData(1, Qt.Horizontal, "Nombre")
+        self.modelo.setHeaderData(2, Qt.Horizontal, "Teléfono")
 
         # VENTANA NUEVO USUARIO
         self.btn.clicked.connect(self.btnNuevoCliente)
