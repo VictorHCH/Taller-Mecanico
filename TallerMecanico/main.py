@@ -74,7 +74,7 @@ class VentanaVenta(QMainWindow):
         self.query = QSqlQuery(db=dba)
 
         self.query.prepare(
-            "SELECT * FROM Concepto"
+            "SELECT idConcepto, refaccion, cantidad, importe, numVenta FROM Concepto"
         )
         self.actualizarQuery()
 
@@ -332,6 +332,9 @@ class VentanaRegistros(QMainWindow):
 
         self.modelo = QSqlQueryModel()
         self.tableView.setModel(self.modelo)
+        self.tableView.setWordWrap(True)
+        self.tableView.horizontalHeader().setStretchLastSection(True)
+        self.tableView.verticalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
 
         self.query = QSqlQuery(db=dba)
 
@@ -392,6 +395,8 @@ class VentanaProductos(QMainWindow):
 
         self.modelo = QSqlQueryModel()
         self.tableView.setModel(self.modelo)
+        self.tableView.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        self.tableView.horizontalHeader().setStretchLastSection(True)
 
 
         self.query = QSqlQuery(db=dba)
@@ -404,6 +409,7 @@ class VentanaProductos(QMainWindow):
 
         self.modelo.setHeaderData(0, Qt.Horizontal, "Nombre")
         self.modelo.setHeaderData(1, Qt.Horizontal, "Precio")
+
 
     def actualizarQuery(self):
         nombreProducto = self.lineEdit.text()
