@@ -1,6 +1,7 @@
 import sys
 import time
-from PyQt5.QtWidgets import QApplication, QMainWindow, QAction, QToolBar, QTableView, QVBoxLayout, QLineEdit, QHBoxLayout, QWidget, QPushButton
+from PyQt5.QtWidgets import (QApplication, QMainWindow, QAction, QToolBar, QTableView, QVBoxLayout, QLineEdit, QHBoxLayout,
+                             QWidget, QPushButton, QHeaderView)
 from PyQt5.uic import loadUi
 from PyQt5.QtGui import QPixmap, QIcon
 from PyQt5.QtCore import QSize, Qt, QRect, QTimer
@@ -154,6 +155,9 @@ class VentanaClientes(QMainWindow):
 
         self.modelo = QSqlQueryModel()
         self.tableView.setModel(self.modelo)
+        self.tableView.setWordWrap(True)
+        self.tableView.horizontalHeader().setStretchLastSection(True)
+        self.tableView.verticalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
 
         self.query = QSqlQuery(db=dba)
 
@@ -234,6 +238,9 @@ class VentanaInventario(QMainWindow):
 
         self.modelo = QSqlQueryModel()
         self.tableView.setModel(self.modelo)
+        self.tableView.setWordWrap(True)
+        self.tableView.horizontalHeader().setStretchLastSection(True)
+        self.tableView.verticalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
 
         self.query = QSqlQuery(db=dba)
 
@@ -385,6 +392,7 @@ class VentanaProductos(QMainWindow):
 
         self.modelo = QSqlQueryModel()
         self.tableView.setModel(self.modelo)
+
 
         self.query = QSqlQuery(db=dba)
 
