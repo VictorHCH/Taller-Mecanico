@@ -3,7 +3,7 @@ import time
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QAction, QToolBar, QTableView, QVBoxLayout, QLineEdit, QHBoxLayout,
                              QWidget, QPushButton, QHeaderView)
 from PyQt5.uic import loadUi
-from PyQt5.QtGui import QPixmap, QIcon
+from PyQt5.QtGui import QPixmap, QIcon, QFont
 from PyQt5.QtCore import QSize, Qt, QRect, QTimer
 from PyQt5.QtSql import QSqlQuery, QSqlQueryModel, QSqlDatabase, QSqlTableModel
 
@@ -17,6 +17,7 @@ class VentanaPrincipal(QMainWindow):
 
         self.pb.setMaximum(100)
         self.pb.setValue(0)
+        self.pb.setFont(QFont("ITC Avant Garde Std Bk Cn", 10, QFont.Bold))
 
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.barraP)
@@ -39,6 +40,11 @@ class VentanaVenta(QMainWindow):
     def __init__(self, parent=None):
         super(VentanaVenta, self).__init__(parent)
         loadUi('ventanas\Venta.ui', self)
+
+        self.label.setFont(QFont("ITC Avant Garde Std Bk Cn", 10, QFont.Bold))
+        self.label_2.setFont(QFont("ITC Avant Garde Std Bk Cn", 10, QFont.Bold))
+        self.label_3.setFont(QFont("ITC Avant Garde Std Bk Cn", 10, QFont.Bold))
+        self.label_4.setFont(QFont("ITC Avant Garde Std Bk Cn", 10, QFont.Bold))
 
         barra = QToolBar()
         barra.setIconSize(QSize(30, 30))
