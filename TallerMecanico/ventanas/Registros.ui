@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>412</width>
-    <height>325</height>
+    <width>513</width>
+    <height>374</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -26,13 +26,14 @@
      <rect>
       <x>150</x>
       <y>20</y>
-      <width>231</width>
+      <width>331</width>
       <height>31</height>
      </rect>
     </property>
     <property name="font">
      <font>
       <family>ITC Avant Garde Std Bk Cn</family>
+      <pointsize>10</pointsize>
      </font>
     </property>
     <property name="styleSheet">
@@ -43,15 +44,15 @@
     <property name="geometry">
      <rect>
       <x>30</x>
-      <y>130</y>
-      <width>55</width>
-      <height>16</height>
+      <y>140</y>
+      <width>71</width>
+      <height>31</height>
      </rect>
     </property>
     <property name="font">
      <font>
       <family>ITC Avant Garde Std Bk Cn</family>
-      <pointsize>8</pointsize>
+      <pointsize>10</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -66,13 +67,13 @@
       <x>30</x>
       <y>80</y>
       <width>81</width>
-      <height>16</height>
+      <height>31</height>
      </rect>
     </property>
     <property name="font">
      <font>
       <family>ITC Avant Garde Std Bk Cn</family>
-      <pointsize>8</pointsize>
+      <pointsize>10</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -85,14 +86,15 @@
     <property name="geometry">
      <rect>
       <x>150</x>
-      <y>170</y>
-      <width>231</width>
+      <y>200</y>
+      <width>331</width>
       <height>31</height>
      </rect>
     </property>
     <property name="font">
      <font>
       <family>ITC Avant Garde Std Bk Cn</family>
+      <pointsize>10</pointsize>
      </font>
     </property>
     <property name="styleSheet">
@@ -103,14 +105,15 @@
     <property name="geometry">
      <rect>
       <x>150</x>
-      <y>220</y>
-      <width>231</width>
+      <y>260</y>
+      <width>331</width>
       <height>31</height>
      </rect>
     </property>
     <property name="font">
      <font>
       <family>ITC Avant Garde Std Bk Cn</family>
+      <pointsize>10</pointsize>
      </font>
     </property>
     <property name="styleSheet">
@@ -121,15 +124,15 @@
     <property name="geometry">
      <rect>
       <x>30</x>
-      <y>170</y>
+      <y>190</y>
       <width>55</width>
-      <height>31</height>
+      <height>51</height>
      </rect>
     </property>
     <property name="font">
      <font>
       <family>ITC Avant Garde Std Bk Cn</family>
-      <pointsize>8</pointsize>
+      <pointsize>10</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -143,14 +146,15 @@ unitario</string>
     <property name="geometry">
      <rect>
       <x>150</x>
-      <y>70</y>
-      <width>231</width>
+      <y>80</y>
+      <width>331</width>
       <height>31</height>
      </rect>
     </property>
     <property name="font">
      <font>
       <family>ITC Avant Garde Std Bk Cn</family>
+      <pointsize>10</pointsize>
      </font>
     </property>
     <property name="styleSheet">
@@ -161,15 +165,15 @@ unitario</string>
     <property name="geometry">
      <rect>
       <x>30</x>
-      <y>30</y>
-      <width>71</width>
-      <height>16</height>
+      <y>20</y>
+      <width>91</width>
+      <height>31</height>
      </rect>
     </property>
     <property name="font">
      <font>
       <family>ITC Avant Garde Std Bk Cn</family>
-      <pointsize>8</pointsize>
+      <pointsize>10</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -185,15 +189,15 @@ unitario</string>
     <property name="geometry">
      <rect>
       <x>30</x>
-      <y>220</y>
-      <width>61</width>
-      <height>31</height>
+      <y>250</y>
+      <width>81</width>
+      <height>51</height>
      </rect>
     </property>
     <property name="font">
      <font>
       <family>ITC Avant Garde Std Bk Cn</family>
-      <pointsize>8</pointsize>
+      <pointsize>10</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -207,7 +211,7 @@ medida</string>
     <property name="geometry">
      <rect>
       <x>150</x>
-      <y>121</y>
+      <y>141</y>
       <width>61</width>
       <height>31</height>
      </rect>
@@ -215,6 +219,7 @@ medida</string>
     <property name="font">
      <font>
       <family>ITC Avant Garde Std Bk Cn</family>
+      <pointsize>10</pointsize>
      </font>
     </property>
     <property name="styleSheet">
@@ -224,8 +229,8 @@ medida</string>
    <widget class="QPushButton" name="pushButton_2">
     <property name="geometry">
      <rect>
-      <x>230</x>
-      <y>280</y>
+      <x>280</x>
+      <y>330</y>
       <width>93</width>
       <height>28</height>
      </rect>
@@ -233,7 +238,7 @@ medida</string>
     <property name="font">
      <font>
       <family>ITC Avant Garde Std Bk Cn</family>
-      <pointsize>9</pointsize>
+      <pointsize>10</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -249,8 +254,8 @@ color: rgb(206, 18, 18);</string>
    <widget class="QPushButton" name="pushButton">
     <property name="geometry">
      <rect>
-      <x>100</x>
-      <y>280</y>
+      <x>150</x>
+      <y>330</y>
       <width>93</width>
       <height>28</height>
      </rect>
@@ -258,7 +263,7 @@ color: rgb(206, 18, 18);</string>
     <property name="font">
      <font>
       <family>ITC Avant Garde Std Bk Cn</family>
-      <pointsize>9</pointsize>
+      <pointsize>10</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>

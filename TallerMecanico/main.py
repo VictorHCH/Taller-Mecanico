@@ -77,7 +77,7 @@ class VentanaVenta(QMainWindow):
         self.query = QSqlQuery(db=dba)
 
         self.query.prepare(
-            "SELECT idConcepto, refaccion, cantidad, importe FROM Concepto"
+            "SELECT idConcepto, refaccion, cantidad, importe, numVenta FROM Concepto"
         )
         self.actualizarQuery()
 
@@ -85,6 +85,7 @@ class VentanaVenta(QMainWindow):
         self.modelo.setHeaderData(1, Qt.Horizontal, "Concepto")
         self.modelo.setHeaderData(2, Qt.Horizontal, "Cantidad")
         self.modelo.setHeaderData(3, Qt.Horizontal, "Importe")
+        self.modelo.removeColumn(4)
 
         #VENTANA NUEVO USUARIO
         self.btn.clicked.connect(self.btnNuevoCliente)
