@@ -2,7 +2,7 @@ import sys
 import sqlite3
 import time
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QAction, QToolBar, QTableView, QVBoxLayout, QLineEdit, QHBoxLayout,
-                             QWidget, QPushButton, QHeaderView)
+                             QWidget, QPushButton, QHeaderView, QStyledItemDelegate)
 from PyQt5.uic import loadUi
 from PyQt5.QtGui import QPixmap, QIcon
 from PyQt5.QtCore import QSize, Qt, QRect, QTimer
@@ -262,6 +262,8 @@ class VentanaInventario(QMainWindow):
         )
         self.actualizarQuery()
 
+        delegateFloat = InitialDelegate(2, self.tableView)
+        self.tableView.setItemDelegateForColumn(2, delegateFloat)
         self.modelo.setHeaderData(0, Qt.Horizontal, "Id producto")
         self.modelo.setHeaderData(1, Qt.Horizontal, "Nombre")
         self.modelo.setHeaderData(2, Qt.Horizontal, "Precio")
@@ -439,6 +441,8 @@ class VentanaProductos(QMainWindow):
         )
         self.actualizarQuery()
 
+        delegateFloat = InitialDelegate(2, self.tableView)
+        self.tableView.setItemDelegateForColumn(1, delegateFloat)
         self.modelo.setHeaderData(0, Qt.Horizontal, "Nombre")
         self.modelo.setHeaderData(1, Qt.Horizontal, "Precio")
 
@@ -483,6 +487,22 @@ def agregarProducto(idP, nombre, cantidad, precio, unidad):
     consulta.execute(sql, datos)
     conexion.commit()
     conexion.close()
+
+
+class InitialDelegate(QStyledItemDelegate):
+    def __init__(self, decimals, parent=None):
+        super().__init__(parent)
+        self.nDecimals = decimals
+
+    def initStyleOption(self, option, index):
+        super().initStyleOption(option, index)
+        option.displayAlignment = Qt.AlignCenter
+        try:
+            text = index.model().data(index, Qt.DisplayRole)
+            number = float(text)
+            option.text = "${:,.{}f}".format(number, self.nDecimals)
+        except:
+            pass
 
 
 app = QApplication(sys.argv)
