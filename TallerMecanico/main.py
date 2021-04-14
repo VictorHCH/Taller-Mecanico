@@ -1,9 +1,10 @@
 import sys
+import sqlite3
 import time
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QAction, QToolBar, QTableView, QVBoxLayout, QLineEdit, QHBoxLayout,
                              QWidget, QPushButton, QHeaderView)
 from PyQt5.uic import loadUi
-from PyQt5.QtGui import QPixmap, QIcon, QFont
+from PyQt5.QtGui import QPixmap, QIcon
 from PyQt5.QtCore import QSize, Qt, QRect, QTimer
 from PyQt5.QtSql import QSqlQuery, QSqlQueryModel, QSqlDatabase, QSqlTableModel
 
@@ -17,7 +18,6 @@ class VentanaPrincipal(QMainWindow):
 
         self.pb.setMaximum(100)
         self.pb.setValue(0)
-        self.pb.setFont(QFont("ITC Avant Garde Std Bk Cn", 10, QFont.Bold))
 
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.barraP)
@@ -40,11 +40,6 @@ class VentanaVenta(QMainWindow):
     def __init__(self, parent=None):
         super(VentanaVenta, self).__init__(parent)
         loadUi('ventanas\Venta.ui', self)
-
-        self.label.setFont(QFont("ITC Avant Garde Std Bk Cn", 10, QFont.Bold))
-        self.label_2.setFont(QFont("ITC Avant Garde Std Bk Cn", 10, QFont.Bold))
-        self.label_3.setFont(QFont("ITC Avant Garde Std Bk Cn", 10, QFont.Bold))
-        self.label_4.setFont(QFont("ITC Avant Garde Std Bk Cn", 10, QFont.Bold))
 
         barra = QToolBar()
         barra.setIconSize(QSize(30, 30))
@@ -397,9 +392,29 @@ class VentanaClienteNuevo(QMainWindow):
         loadUi("ventanas\ClienteNuevo.ui", self)
 
         self.pushButton_2.clicked.connect(self.cancelar)
+        self.pushButton.clicked.connect(self.aceptar)
 
     def cancelar(self):
         self.hide()
+
+    def aceptar(self):
+        nombre = self.lineEdit.text()
+        telefono = self.lineEdit_2.text()
+        agregarCliente(nombre, telefono)
+        self.hide()
+
+
+def agregarCliente(nombre, telefono):
+    conexion = sqlite3.connect('puntoVenta.db')
+    consulta = conexion.cursor()
+
+    datos = (nombre, telefono)
+
+    sql = """INSERT INTO Cliente (nombre, telefono) VALUES (?,?)"""
+
+    consulta.execute(sql, datos)
+    conexion.commit()
+    conexion.close()
 
 
 class VentanaProductos(QMainWindow):
@@ -442,9 +457,32 @@ class VentanaRegistroProducto(QMainWindow):
         loadUi("ventanas\Registros.ui", self)
 
         self.pushButton_2.clicked.connect(self.cancelar)
+        self.pushButton.clicked.connect(self.aceptar)
 
     def cancelar(self):
         self.hide()
+
+    def aceptar(self):
+        idP = self.lineEdit.text()
+        nombre = self.lineEdit_2.text()
+        cantidad = self.spinBox.text()
+        precio = self.lineEdit_4.text()
+        unidad = self.lineEdit_5.text()
+        agregarProducto(idP, nombre, cantidad, precio, unidad)
+        self.hide()
+
+
+def agregarProducto(idP, nombre, cantidad, precio, unidad):
+    conexion = sqlite3.connect('puntoVenta.db')
+    consulta = conexion.cursor()
+
+    datos = (idP, nombre, cantidad, precio, unidad)
+
+    sql = """INSERT INTO Refaccion (idRefaccion, nombre, cantidad, precio, uniMedida) VALUES (?,?,?,?,?)"""
+
+    consulta.execute(sql, datos)
+    conexion.commit()
+    conexion.close()
 
 
 app = QApplication(sys.argv)
