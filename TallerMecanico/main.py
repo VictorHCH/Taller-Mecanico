@@ -4,7 +4,7 @@ import time
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QAction, QToolBar, QTableView, QVBoxLayout, QLineEdit, QHBoxLayout,
                              QWidget, QPushButton, QHeaderView, QStyledItemDelegate)
 from PyQt5.uic import loadUi
-from PyQt5.QtGui import QPixmap, QIcon
+from PyQt5.QtGui import QPixmap, QIcon, QFont
 from PyQt5.QtCore import QSize, Qt, QRect, QTimer
 from PyQt5.QtSql import QSqlQuery, QSqlQueryModel, QSqlDatabase, QSqlTableModel
 
@@ -73,6 +73,7 @@ class VentanaVenta(QMainWindow):
         self.tableView.setModel(self.modelo)
         self.tableView.setWordWrap(True)
         self.tableView.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        self.tableView.horizontalHeader().setFont(QFont("ITC Avant Garde Std Bk Cn", 10, QFont.Bold))
         self.tableView.verticalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
 
         self.query = QSqlQuery(db=dba)
@@ -90,9 +91,11 @@ class VentanaVenta(QMainWindow):
 
         #VENTANA NUEVO USUARIO
         self.btn.clicked.connect(self.btnNuevoCliente)
+        self.btn.setToolTip("Agregar nuevo cliente")
 
         #Ventana agregar concepto
         self.pushButton_3.clicked.connect(self.agregarConcepto)
+        self.pushButton_3.setToolTip("Agregar concepto")
 
     def btnVenta(self):
         pass
@@ -165,6 +168,7 @@ class VentanaClientes(QMainWindow):
         self.tableView.setModel(self.modelo)
         self.tableView.setWordWrap(True)
         self.tableView.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        self.tableView.horizontalHeader().setFont(QFont("ITC Avant Garde Std Bk Cn", 10, QFont.Bold))
         self.tableView.verticalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
 
         self.query = QSqlQuery(db=dba)
@@ -181,6 +185,7 @@ class VentanaClientes(QMainWindow):
 
         # VENTANA NUEVO USUARIO
         self.btn.clicked.connect(self.btnNuevoCliente)
+        self.btn.setToolTip("Agregar nuevo cliente")
 
     def btnVenta(self):
         self.hide()
@@ -251,7 +256,8 @@ class VentanaInventario(QMainWindow):
         self.modelo = QSqlQueryModel()
         self.tableView.setModel(self.modelo)
         self.tableView.setWordWrap(True)
-        self.tableView.horizontalHeader().setStretchLastSection(True)
+        self.tableView.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        self.tableView.horizontalHeader().setFont(QFont("ITC Avant Garde Std Bk Cn", 9, QFont.Bold))
         self.tableView.verticalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
 
         self.query = QSqlQuery(db=dba)
@@ -272,6 +278,7 @@ class VentanaInventario(QMainWindow):
 
         #Agregar producto
         self.btn_2.clicked.connect(self.agregarProducto)
+        self.btn_2.setToolTip("Agregar producto")
 
         #Pruebas
 
@@ -430,6 +437,7 @@ class VentanaProductos(QMainWindow):
         self.modelo = QSqlQueryModel()
         self.tableView.setModel(self.modelo)
         self.tableView.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        self.tableView.horizontalHeader().setFont(QFont("ITC Avant Garde Std Bk Cn", 10, QFont.Bold))
         self.tableView.horizontalHeader().setStretchLastSection(True)
 
 
@@ -460,6 +468,8 @@ class VentanaRegistroProducto(QMainWindow):
         super(VentanaRegistroProducto, self).__init__(parent)
         loadUi("ventanas\Registros.ui", self)
 
+        self.comboBox.addItems(["Unidades", "Metros", "Kilogramos"])
+
         self.pushButton_2.clicked.connect(self.cancelar)
         self.pushButton.clicked.connect(self.aceptar)
 
@@ -471,7 +481,7 @@ class VentanaRegistroProducto(QMainWindow):
         nombre = self.lineEdit_2.text()
         cantidad = self.spinBox.text()
         precio = self.lineEdit_4.text()
-        unidad = self.lineEdit_5.text()
+        unidad = self.comboBox.currentText()
         agregarProducto(idP, nombre, cantidad, precio, unidad)
         self.hide()
 
