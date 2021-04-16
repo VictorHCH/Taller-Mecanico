@@ -453,8 +453,8 @@ class VentanaProductos(QMainWindow):
         self.modelo.setHeaderData(1, Qt.Horizontal, "Nombre")
         self.modelo.setHeaderData(2, Qt.Horizontal, "Precio")
 
-        self.tableView.setSelectionBehavior(QTableView.SelectRows)
-        self.tableView.itemSelectionChanged.connect(self.agregaProducto)
+        #self.tableView.setSelectionBehavior(QTableView.SelectRows)
+        #self.tableView.itemSelectionChanged.connect(self.agregaProducto)
 
     def agregaProducto(self):
         print("Hola")
