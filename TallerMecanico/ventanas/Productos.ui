@@ -40,7 +40,7 @@
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QTableView" name="tableView">
+   <widget class="QTableWidget" name="tableView">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -48,15 +48,6 @@
       <width>531</width>
       <height>421</height>
      </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>ITC Avant Garde Std Bk Cn</family>
-      <pointsize>10</pointsize>
-     </font>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: rgb(255, 255, 255);</string>
     </property>
    </widget>
   </widget>

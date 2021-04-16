@@ -2,7 +2,7 @@ import sys
 import sqlite3
 import time
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QAction, QToolBar, QTableView, QVBoxLayout, QLineEdit, QHBoxLayout,
-                             QWidget, QPushButton, QHeaderView, QStyledItemDelegate)
+                             QWidget, QPushButton, QHeaderView, QStyledItemDelegate, QAbstractItemView)
 from PyQt5.uic import loadUi
 from PyQt5.QtGui import QPixmap, QIcon, QFont
 from PyQt5.QtCore import QSize, Qt, QRect, QTimer
@@ -440,20 +440,28 @@ class VentanaProductos(QMainWindow):
         self.tableView.horizontalHeader().setFont(QFont("ITC Avant Garde Std Bk Cn", 10, QFont.Bold))
         self.tableView.horizontalHeader().setStretchLastSection(True)
 
-
         self.query = QSqlQuery(db=dba)
 
         self.query.prepare(
-            "SELECT nombre, precio FROM Refaccion WHERE "
+            "SELECT idRefaccion, nombre, precio FROM Refaccion WHERE "
             "nombre LIKE '%' || :nombreProducto || '%'"
         )
         self.actualizarQuery()
 
         delegateFloat = InitialDelegate(2, self.tableView)
         self.tableView.setItemDelegateForColumn(1, delegateFloat)
-        self.modelo.setHeaderData(0, Qt.Horizontal, "Nombre")
-        self.modelo.setHeaderData(1, Qt.Horizontal, "Precio")
+        self.modelo.setHeaderData(1, Qt.Horizontal, "Nombre")
+        self.modelo.setHeaderData(2, Qt.Horizontal, "Precio")
 
+        self.tableView.setSelectionBehavior(QTableView.SelectRows)
+        self.tableView.itemSelectionChanged.connect(self.agregaProducto)
+
+    def agregaProducto(self):
+        print("Hola")
+        row = self.tableView.currentRow()
+        item = self.tableView.item(row, 0)
+        if item is not None:
+            print(item.text())
 
     def actualizarQuery(self):
         nombreProducto = self.lineEdit.text()
