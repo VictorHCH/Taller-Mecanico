@@ -2,11 +2,12 @@ import sys
 import sqlite3
 import time
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QAction, QToolBar, QTableView, QVBoxLayout, QLineEdit, QHBoxLayout,
-                             QWidget, QPushButton, QHeaderView, QStyledItemDelegate, QDateEdit)
+                             QWidget, QPushButton, QHeaderView, QStyledItemDelegate, QDateEdit, QMessageBox, QTableWidgetItem, QAbstractItemView)
 from PyQt5.uic import loadUi
 from PyQt5.QtGui import QPixmap, QIcon, QFont
 from PyQt5.QtCore import QSize, Qt, QRect, QTimer, QDate
 from PyQt5.QtSql import QSqlQuery, QSqlQueryModel, QSqlDatabase, QSqlTableModel
+
 
 class VentanaPrincipal(QMainWindow):
     def __init__(self, parent=None):
@@ -351,39 +352,19 @@ class VentanaRegistros(QMainWindow):
         self.dateEdit.setCursor(Qt.PointingHandCursor)
 
         self.lineEdit.setPlaceholderText("Nombre del cliente")
-        self.lineEdit.textChanged.connect(self.actualizarQuery1)
-        self.dateEdit.dateChanged.connect(self.actualizarQuery1)
-        self.btnDetalle.clicked.connect(self.actualizarQuery2)
+        self.lineEdit.textChanged.connect(self.actualizarQuery)
+        self.dateEdit.dateChanged.connect(self.actualizarQuery)
 
-        self.modelo1 = QSqlQueryModel()
-        self.modelo2 = QSqlQueryModel()
-        self.tableView.setModel(self.modelo1)
-        self.tableView_2.setModel(self.modelo2)
-        self.tableView.setWordWrap(True)
-        self.tableView.horizontalHeader().setStretchLastSection(True)
-        self.tableView.verticalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
-        self.tableView_2.setWordWrap(True)
-        self.tableView_2.horizontalHeader().setStretchLastSection(True)
-        self.tableView_2.verticalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
+        self.tableWidget.setSelectionBehavior(QTableView.SelectRows)
+        self.tableWidget.itemDoubleClicked.connect(self.detalleVenta)
 
-        self.query1 = QSqlQuery(db=dba)
+    def detalleVenta(self):
+        row = self.tableWidget.currentRow()
+        item = self.tableWidget.item(row, 0)
+        if item is not None:
+            otraventana = VentanaDetalleRegistro(item.text(), self)
+            otraventana.show()
 
-        self.query1.prepare(
-            "SELECT Venta.numVenta, nombre, Venta.vehiculo, Venta.fecha, Venta.total FROM Cliente "
-            "INNER JOIN Venta ON Venta.cliente = Cliente.idCliente "
-            "WHERE Cliente.nombre LIKE '%' || :nombreCliente || '%' AND "
-            "Venta.fecha LIKE '%' || :fechaVenta || '%'"
-        )
-        self.actualizarQuery1()
-
-        self.query2 = QSqlQuery(db=dba)
-
-        self.query2.prepare(
-            "SELECT idConcepto, Refaccion.nombre, Concepto.cantidad, Refaccion.precio, importe FROM Concepto "
-            "INNER JOIN Refaccion ON Refaccion.idRefaccion = Concepto.refaccion "
-            "INNER JOIN Venta ON Venta.numVenta = Concepto.numVenta "
-            "WHERE Venta.numVenta = :numVenta"
-        )
 
     def btnVenta(self):
         self.hide()
@@ -403,21 +384,36 @@ class VentanaRegistros(QMainWindow):
     def btnReg(self, s):
         pass
 
-    def actualizarQuery1(self):
-        nombreCliente = self.lineEdit.text()
-        fechaVenta = self.dateEdit.text()
-        self.query1.bindValue(":nombreCliente", nombreCliente)
-        self.query1.bindValue(":fechaVenta", fechaVenta)
+    def actualizarQuery(self):
+        conexion = sqlite3.connect("puntoVenta.db")
+        consulta = conexion.cursor()
 
-        self.query1.exec_()
-        self.modelo1.setQuery(self.query1)
+        dato = ("%"+self.lineEdit.text()+"%", "%"+self.dateEdit.text()+"%")
 
-    def actualizarQuery2(self):
-        numVenta = self.detalles.text()
-        self.query2.bindValue(":numVenta", numVenta)
+        sql = """SELECT Venta.numVenta, nombre, Venta.vehiculo, Venta.fecha, Venta.total FROM Cliente INNER JOIN Venta ON Venta.cliente = Cliente.idCliente
+        WHERE Cliente.nombre LIKE ? AND Venta.fecha LIKE ?"""
+        try:
+            consulta.execute(sql, dato)
+            datosDevueltos = consulta.fetchall()
+            conexion.close()
 
-        self.query2.exec_()
-        self.modelo2.setQuery(self.query2)
+            if datosDevueltos:
+                fila = 0
+                for datos in datosDevueltos:
+                    self.tableWidget.setRowCount(fila + 1)
+
+                    self.tableWidget.setItem(fila, 0, QTableWidgetItem(str(datos[0])))
+                    self.tableWidget.setItem(fila, 1, QTableWidgetItem(str(datos[1])))
+                    self.tableWidget.setItem(fila, 2, QTableWidgetItem(str(datos[2])))
+                    self.tableWidget.setItem(fila, 3, QTableWidgetItem(str(datos[3])))
+                    self.tableWidget.setItem(fila, 4, QTableWidgetItem(str(datos[4])))
+
+                    fila += 1
+            else:
+                QMessageBox.information(self, "Buscar venta", "No se encontro "
+                                                                "información.   ", QMessageBox.Ok)
+        except:
+            pass
 
 
 class VentanaClienteNuevo(QMainWindow):
@@ -464,7 +460,6 @@ class VentanaProductos(QMainWindow):
         self.tableView.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         self.tableView.horizontalHeader().setFont(QFont("ITC Avant Garde Std Bk Cn", 10, QFont.Bold))
         self.tableView.horizontalHeader().setStretchLastSection(True)
-
 
         self.query = QSqlQuery(db=dba)
 
@@ -544,6 +539,34 @@ class InitialDelegate(QStyledItemDelegate):
             option.text = "${:,.{}f}".format(number, self.nDecimals)
         except:
             pass
+
+
+class VentanaDetalleRegistro(QMainWindow):
+    def __init__(self, id,  parent=None):
+        super(VentanaDetalleRegistro, self).__init__(parent)
+        loadUi("ventanas\DetalleVenta.ui", self)
+
+        self.id = id
+
+        self.modelo = QSqlQueryModel()
+        self.tableView.setModel(self.modelo)
+
+        self.query = QSqlQuery(db=dba)
+
+        self.query.prepare(
+            "SELECT idConcepto, Refaccion.nombre, Concepto.cantidad, Refaccion.precio, importe FROM Concepto "
+            "INNER JOIN Refaccion ON Refaccion.idRefaccion = Concepto.refaccion "
+            "INNER JOIN Venta ON Venta.numVenta = Concepto.numVenta "
+            "WHERE Venta.numVenta = :numVenta"
+        )
+        self.actualizarQuery()
+
+    def actualizarQuery(self):
+        numVenta = self.id
+        self.query.bindValue(":numVenta", numVenta)
+
+        self.query.exec_()
+        self.modelo.setQuery(self.query)
 
 
 app = QApplication(sys.argv)
