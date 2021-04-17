@@ -75,6 +75,21 @@ class VentanaVenta(QMainWindow):
         self.tableView.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         self.tableView.horizontalHeader().setFont(QFont("ITC Avant Garde Std Bk Cn", 10, QFont.Bold))
         self.tableView.verticalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
+        self.tableView.setWordWrap(True)
+        self.tableView.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        self.tableView.horizontalHeader().setFont(QFont("ITC Avant Garde Std Bk Cn", 10, QFont.Bold))
+        self.tableView.verticalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
+        self.tableView.setDragDropOverwriteMode(False)
+        self.tableView.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.tableView.setTextElideMode(Qt.ElideRight)
+        self.tableView.setWordWrap(False)
+        self.tableView.setSortingEnabled(False)
+        self.tableView.horizontalHeader().setDefaultAlignment(Qt.AlignHCenter | Qt.AlignVCenter |
+                                                              Qt.AlignCenter)
+        self.tableView.horizontalHeader().setHighlightSections(False)
+        self.tableView.horizontalHeader().setStretchLastSection(True)
+        self.tableView.verticalHeader().setVisible(False)
+        self.tableView.setAlternatingRowColors(True)
 
         self.query = QSqlQuery(db=dba)
 
@@ -170,6 +185,17 @@ class VentanaClientes(QMainWindow):
         self.tableView.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         self.tableView.horizontalHeader().setFont(QFont("ITC Avant Garde Std Bk Cn", 10, QFont.Bold))
         self.tableView.verticalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
+        self.tableView.setDragDropOverwriteMode(False)
+        self.tableView.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.tableView.setTextElideMode(Qt.ElideRight)
+        self.tableView.setWordWrap(False)
+        self.tableView.setSortingEnabled(False)
+        self.tableView.horizontalHeader().setDefaultAlignment(Qt.AlignHCenter | Qt.AlignVCenter |
+                                                              Qt.AlignCenter)
+        self.tableView.horizontalHeader().setHighlightSections(False)
+        self.tableView.horizontalHeader().setStretchLastSection(True)
+        self.tableView.verticalHeader().setVisible(False)
+        self.tableView.setAlternatingRowColors(True)
 
         self.query = QSqlQuery(db=dba)
 
@@ -178,10 +204,6 @@ class VentanaClientes(QMainWindow):
             "nombre LIKE '%' || :nombreCliente || '%'"
         )
         self.actualizarQuery()
-
-        self.modelo.setHeaderData(0, Qt.Horizontal, "#")
-        self.modelo.setHeaderData(1, Qt.Horizontal, "Nombre")
-        self.modelo.setHeaderData(2, Qt.Horizontal, "Teléfono")
 
         # VENTANA NUEVO USUARIO
         self.btn.clicked.connect(self.btnNuevoCliente)
@@ -259,6 +281,17 @@ class VentanaInventario(QMainWindow):
         self.tableView.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         self.tableView.horizontalHeader().setFont(QFont("ITC Avant Garde Std Bk Cn", 9, QFont.Bold))
         self.tableView.verticalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
+        self.tableView.setDragDropOverwriteMode(False)
+        self.tableView.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.tableView.setTextElideMode(Qt.ElideRight)
+        self.tableView.setWordWrap(False)
+        self.tableView.setSortingEnabled(False)
+        self.tableView.horizontalHeader().setDefaultAlignment(Qt.AlignHCenter | Qt.AlignVCenter |
+                                                              Qt.AlignCenter)
+        self.tableView.horizontalHeader().setHighlightSections(False)
+        self.tableView.horizontalHeader().setStretchLastSection(True)
+        self.tableView.verticalHeader().setVisible(False)
+        self.tableView.setAlternatingRowColors(True)
 
         self.query = QSqlQuery(db=dba)
 
@@ -357,6 +390,8 @@ class VentanaRegistros(QMainWindow):
 
         self.tableWidget.setSelectionBehavior(QTableView.SelectRows)
         self.tableWidget.itemDoubleClicked.connect(self.detalleVenta)
+
+        self.actualizarQuery()
 
     def detalleVenta(self):
         row = self.tableWidget.currentRow()
@@ -471,11 +506,19 @@ class VentanaProductos(QMainWindow):
 
         delegateFloat = InitialDelegate(2, self.tableView)
         self.tableView.setItemDelegateForColumn(1, delegateFloat)
-        self.modelo.setHeaderData(0, Qt.Horizontal, "Nombre")
-        self.modelo.setHeaderData(1, Qt.Horizontal, "Precio")
-        self.tableView.setSelectionBehavior(QTableView.SelectRows)
-        #self.tableView.hideColumn(0)
-        #self.btnAgregar.clicked.connect(self.agregaProducto)
+        self.modelo.setHeaderData(1, Qt.Horizontal, "Nombre")
+        self.modelo.setHeaderData(2, Qt.Horizontal, "Precio")
+        self.tableView.setDragDropOverwriteMode(False)
+        self.tableView.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.tableView.setTextElideMode(Qt.ElideRight)
+        self.tableView.setWordWrap(False)
+        self.tableView.setSortingEnabled(False)
+        self.tableView.horizontalHeader().setDefaultAlignment(Qt.AlignHCenter | Qt.AlignVCenter |
+                                                              Qt.AlignCenter)
+        self.tableView.horizontalHeader().setHighlightSections(False)
+        self.tableView.horizontalHeader().setStretchLastSection(True)
+        self.tableView.verticalHeader().setVisible(False)
+        self.tableView.setAlternatingRowColors(True)
 
     def agregaProducto(self):
         pass
@@ -550,6 +593,18 @@ class VentanaDetalleRegistro(QMainWindow):
 
         self.modelo = QSqlQueryModel()
         self.tableView.setModel(self.modelo)
+        self.tableView.setDragDropOverwriteMode(False)
+        self.tableView.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.tableView.setTextElideMode(Qt.ElideRight)
+        self.tableView.setWordWrap(False)
+        self.tableView.setSortingEnabled(False)
+        self.tableView.horizontalHeader().setDefaultAlignment(Qt.AlignHCenter | Qt.AlignVCenter |
+                                                          Qt.AlignCenter)
+        self.tableView.horizontalHeader().setHighlightSections(False)
+        self.tableView.horizontalHeader().setStretchLastSection(True)
+        self.tableView.verticalHeader().setVisible(False)
+        self.tableView.setAlternatingRowColors(True)
+
 
         self.query = QSqlQuery(db=dba)
 
