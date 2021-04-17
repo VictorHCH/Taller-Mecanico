@@ -2,12 +2,11 @@ import sys
 import sqlite3
 import time
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QAction, QToolBar, QTableView, QVBoxLayout, QLineEdit, QHBoxLayout,
-                             QWidget, QPushButton, QHeaderView, QStyledItemDelegate)
+                             QWidget, QPushButton, QHeaderView, QStyledItemDelegate, QDateEdit)
 from PyQt5.uic import loadUi
 from PyQt5.QtGui import QPixmap, QIcon, QFont
-from PyQt5.QtCore import QSize, Qt, QRect, QTimer
+from PyQt5.QtCore import QSize, Qt, QRect, QTimer, QDate
 from PyQt5.QtSql import QSqlQuery, QSqlQueryModel, QSqlDatabase, QSqlTableModel
-#Corazón. Hola
 
 class VentanaPrincipal(QMainWindow):
     def __init__(self, parent=None):
@@ -18,7 +17,7 @@ class VentanaPrincipal(QMainWindow):
 
         self.pb.setMaximum(100)
         self.pb.setValue(0)
-        #Victor Prueba
+
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.barraP)
         self.timer.start(100)
@@ -345,26 +344,45 @@ class VentanaRegistros(QMainWindow):
 
         barra.addSeparator()
 
-        #fechas = self.lineEdit_2.date()
+        self.dateEdit.setDate(QDate.currentDate())
+        self.dateEdit.setMaximumDate(QDate.currentDate())
+        self.dateEdit.setDisplayFormat("yyyy-MM-dd")
+        self.dateEdit.setCalendarPopup(True)
+        self.dateEdit.setCursor(Qt.PointingHandCursor)
 
         self.lineEdit.setPlaceholderText("Nombre del cliente")
-        self.lineEdit_2.setPlaceholderText("Fecha")
-        self.lineEdit.textChanged.connect(self.actualizarQuery)
+        self.lineEdit.textChanged.connect(self.actualizarQuery1)
+        self.btnDetalle.clicked.connect(self.actualizarQuery2)
 
-        self.modelo = QSqlQueryModel()
-        self.tableView.setModel(self.modelo)
+        self.modelo1 = QSqlQueryModel()
+        self.modelo2 = QSqlQueryModel()
+        self.tableView.setModel(self.modelo1)
+        self.tableView_2.setModel(self.modelo2)
         self.tableView.setWordWrap(True)
         self.tableView.horizontalHeader().setStretchLastSection(True)
         self.tableView.verticalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
+        self.tableView_2.setWordWrap(True)
+        self.tableView_2.horizontalHeader().setStretchLastSection(True)
+        self.tableView_2.verticalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
 
-        self.query = QSqlQuery(db=dba)
+        self.query1 = QSqlQuery(db=dba)
 
-        self.query.prepare(
-            "SELECT * FROM Venta WHERE "
-            "rfc LIKE '%' || :nombreCliente || '%' AND "
-            "fecha LIKE '%' || :fecha || '%'"
+        self.query1.prepare(
+            "SELECT Venta.numVenta, nombre, Venta.vehiculo, Venta.fecha, Venta.total FROM Cliente "
+            "INNER JOIN Venta ON Venta.cliente = Cliente.idCliente "
+            "WHERE Cliente.nombre LIKE '%' || :nombreCliente || '%' AND "
+            "Venta.fecha LIKE '%' || :fechaVenta || '%'"
         )
-        self.actualizarQuery()
+        self.actualizarQuery1()
+
+        self.query2 = QSqlQuery(db=dba)
+
+        self.query2.prepare(
+            "SELECT idConcepto, Refaccion.nombre, Concepto.cantidad, Refaccion.precio, importe FROM Concepto "
+            "INNER JOIN Refaccion ON Refaccion.idRefaccion = Concepto.refaccion "
+            "INNER JOIN Venta ON Venta.numVenta = Concepto.numVenta "
+            "WHERE Venta.numVenta = :numVenta"
+        )
 
     def btnVenta(self):
         self.hide()
@@ -384,15 +402,21 @@ class VentanaRegistros(QMainWindow):
     def btnReg(self, s):
         pass
 
-    def actualizarQuery(self):
+    def actualizarQuery1(self):
         nombreCliente = self.lineEdit.text()
-        self.query.bindValue(":nombreCliente", nombreCliente)
+        fechaVenta = self.dateEdit.text()
+        self.query1.bindValue(":nombreCliente", nombreCliente)
+        self.query1.bindValue(":fechaVenta", fechaVenta)
 
-        fecha = self.lineEdit_2.text()
-        self.query.bindValue(":fecha", fecha)
+        self.query1.exec_()
+        self.modelo1.setQuery(self.query1)
 
-        self.query.exec_()
-        self.modelo.setQuery(self.query)
+    def actualizarQuery2(self):
+        numVenta = self.detalles.text()
+        self.query2.bindValue(":numVenta", numVenta)
+
+        self.query2.exec_()
+        self.modelo2.setQuery(self.query2)
 
 
 class VentanaClienteNuevo(QMainWindow):
@@ -444,7 +468,7 @@ class VentanaProductos(QMainWindow):
         self.query = QSqlQuery(db=dba)
 
         self.query.prepare(
-            "SELECT nombre, precio FROM Refaccion WHERE "
+            "SELECT idRefaccion, nombre, precio FROM Refaccion WHERE "
             "nombre LIKE '%' || :nombreProducto || '%'"
         )
         self.actualizarQuery()
@@ -453,6 +477,12 @@ class VentanaProductos(QMainWindow):
         self.tableView.setItemDelegateForColumn(1, delegateFloat)
         self.modelo.setHeaderData(0, Qt.Horizontal, "Nombre")
         self.modelo.setHeaderData(1, Qt.Horizontal, "Precio")
+        self.tableView.setSelectionBehavior(QTableView.SelectRows)
+        #self.tableView.hideColumn(0)
+        #self.btnAgregar.clicked.connect(self.agregaProducto)
+
+    def agregaProducto(self):
+        pass
 
 
     def actualizarQuery(self):
