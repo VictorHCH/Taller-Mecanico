@@ -32,8 +32,8 @@
     </property>
     <property name="font">
      <font>
-      <family>ITC Avant Garde Std Bk Cn</family>
-      <pointsize>10</pointsize>
+      <family>Franklin Gothic Book</family>
+      <pointsize>9</pointsize>
      </font>
     </property>
     <property name="styleSheet">
@@ -51,8 +51,8 @@
     </property>
     <property name="font">
      <font>
-      <family>ITC Avant Garde Std Bk Cn</family>
-      <pointsize>12</pointsize>
+      <family>Franklin Gothic Book</family>
+      <pointsize>9</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -62,7 +62,7 @@
 color: rgb(206, 18, 18);</string>
     </property>
     <property name="text">
-     <string>+</string>
+     <string/>
     </property>
    </widget>
    <widget class="QTableView" name="tableView">
@@ -76,12 +76,62 @@ color: rgb(206, 18, 18);</string>
     </property>
     <property name="font">
      <font>
-      <family>ITC Avant Garde Std Bk Cn</family>
-      <pointsize>10</pointsize>
+      <family>Franklin Gothic Book</family>
+      <pointsize>9</pointsize>
      </font>
     </property>
     <property name="styleSheet">
      <string notr="true">background-color: rgb(255, 255, 255);</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_2">
+    <property name="geometry">
+     <rect>
+      <x>560</x>
+      <y>20</y>
+      <width>41</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Franklin Gothic Book</family>
+      <pointsize>9</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(155, 155, 155);
+color: rgb(206, 18, 18);</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_3">
+    <property name="geometry">
+     <rect>
+      <x>620</x>
+      <y>20</y>
+      <width>41</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Franklin Gothic Book</family>
+      <pointsize>9</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(155, 155, 155);
+color: rgb(206, 18, 18);</string>
+    </property>
+    <property name="text">
+     <string/>
     </property>
    </widget>
   </widget>
