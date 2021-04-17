@@ -2,11 +2,12 @@ import sys
 import sqlite3
 import time
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QAction, QToolBar, QTableView, QVBoxLayout, QLineEdit, QHBoxLayout,
-                             QWidget, QPushButton, QHeaderView, QStyledItemDelegate, QAbstractItemView)
+                            QWidget, QPushButton, QHeaderView, QStyledItemDelegate, QAbstractItemView)
 from PyQt5.uic import loadUi
 from PyQt5.QtGui import QPixmap, QIcon, QFont
 from PyQt5.QtCore import QSize, Qt, QRect, QTimer
 from PyQt5.QtSql import QSqlQuery, QSqlQueryModel, QSqlDatabase, QSqlTableModel
+#Victor
 
 
 class VentanaPrincipal(QMainWindow):
@@ -453,15 +454,12 @@ class VentanaProductos(QMainWindow):
         self.modelo.setHeaderData(1, Qt.Horizontal, "Nombre")
         self.modelo.setHeaderData(2, Qt.Horizontal, "Precio")
 
-        #self.tableView.setSelectionBehavior(QTableView.SelectRows)
-        #self.tableView.itemSelectionChanged.connect(self.agregaProducto)
+        self.tableView.setSelectionBehavior(QTableView.SelectRows)
+        self.tableView.hideColumn(0)
+        self.btnAgregar.clicked.connect(self.agregaProducto)
 
     def agregaProducto(self):
-        print("Hola")
-        row = self.tableView.currentRow()
-        item = self.tableView.item(row, 0)
-        if item is not None:
-            print(item.text())
+        pass
 
     def actualizarQuery(self):
         nombreProducto = self.lineEdit.text()
