@@ -18,7 +18,7 @@ class VentanaPrincipal(QMainWindow):
 
         self.pb.setMaximum(100)
         self.pb.setValue(0)
-
+        #Victor Prueba
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.barraP)
         self.timer.start(100)
