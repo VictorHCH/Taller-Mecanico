@@ -21,7 +21,7 @@
    <string notr="true">background-color: rgb(199, 199, 199);</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QLineEdit" name="lineEdit_4">
+   <widget class="QLineEdit" name="le_4">
     <property name="geometry">
      <rect>
       <x>150</x>
@@ -61,7 +61,7 @@
      <string>Nombre</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton">
+   <widget class="QPushButton" name="btn_2">
     <property name="geometry">
      <rect>
       <x>150</x>
@@ -86,7 +86,7 @@ color: rgb(206, 18, 18);</string>
      <string>Borrar</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit">
+   <widget class="QLineEdit" name="le">
     <property name="geometry">
      <rect>
       <x>30</x>
@@ -105,7 +105,7 @@ color: rgb(206, 18, 18);</string>
      <string notr="true">background-color: rgb(255, 255, 255);</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit_2">
+   <widget class="QLineEdit" name="le_2">
     <property name="geometry">
      <rect>
       <x>150</x>
@@ -145,7 +145,7 @@ color: rgb(206, 18, 18);</string>
      <string>Teléfono</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_2">
+   <widget class="QPushButton" name="btn_3">
     <property name="geometry">
      <rect>
       <x>280</x>

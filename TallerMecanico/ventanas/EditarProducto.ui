@@ -61,7 +61,7 @@
      <string>Nombre</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit_3">
+   <widget class="QLineEdit" name="le_3">
     <property name="geometry">
      <rect>
       <x>150</x>
@@ -80,7 +80,7 @@
      <string notr="true">background-color: rgb(255, 255, 255);</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit_5">
+   <widget class="QLineEdit" name="le_5">
     <property name="geometry">
      <rect>
       <x>150</x>
@@ -118,7 +118,7 @@
      <string notr="true">background-color: rgb(255, 255, 255);</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_3">
+   <widget class="QPushButton" name="btn_2">
     <property name="geometry">
      <rect>
       <x>150</x>
@@ -164,7 +164,7 @@ color: rgb(206, 18, 18);</string>
      <string>Cantidad</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_4">
+   <widget class="QPushButton" name="btn_3">
     <property name="geometry">
      <rect>
       <x>280</x>
@@ -211,7 +211,7 @@ color: rgb(206, 18, 18);</string>
 medida</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit">
+   <widget class="QLineEdit" name="le">
     <property name="geometry">
      <rect>
       <x>30</x>
