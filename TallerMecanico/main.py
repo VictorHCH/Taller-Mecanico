@@ -352,6 +352,7 @@ class VentanaRegistros(QMainWindow):
 
         self.lineEdit.setPlaceholderText("Nombre del cliente")
         self.lineEdit.textChanged.connect(self.actualizarQuery1)
+        self.dateEdit.dateChanged.connect(self.actualizarQuery1)
         self.btnDetalle.clicked.connect(self.actualizarQuery2)
 
         self.modelo1 = QSqlQueryModel()
