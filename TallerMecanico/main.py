@@ -7,7 +7,7 @@ from PyQt5.uic import loadUi
 from PyQt5.QtGui import QPixmap, QIcon, QFont
 from PyQt5.QtCore import QSize, Qt, QRect, QTimer
 from PyQt5.QtSql import QSqlQuery, QSqlQueryModel, QSqlDatabase, QSqlTableModel
-
+#Corazón
 
 class VentanaPrincipal(QMainWindow):
     def __init__(self, parent=None):
