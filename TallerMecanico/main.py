@@ -94,6 +94,9 @@ class VentanaVenta(QMainWindow):
 
         self.actualizarQuery()
 
+        self.modelo = QSqlTableModel(db=dba)
+        self.tvConcepto.setModel(self.modelo)
+
         # VENTANA NUEVO USUARIO
         self.btn.clicked.connect(self.btnNuevoCliente)
         self.btn.setToolTip("Agregar nuevo cliente")
@@ -562,8 +565,10 @@ class VentanaProductos(QMainWindow):
         self.actualizarQuery()
 
     def agregaProducto(self):
-        print("Hola")
-        pass
+        row = self.tableWidget.currentRow()
+        item = self.tableWidget.item(row, 0)
+        otraventana = VentanaAgregarProducto(item.text(), self.numVenta, self)
+        otraventana.show()
 
     def actualizarQuery(self):
         conexion = sqlite3.connect("puntoVenta.db")
@@ -686,6 +691,55 @@ class VentanaDetalleRegistro(QMainWindow):
 
         self.query.exec_()
         self.modelo.setQuery(self.query)
+
+
+class VentanaAgregarProducto(QMainWindow):
+    def __init__(self, idPro, idVen,  parent=None):
+        super(VentanaAgregarProducto, self).__init__(parent)
+        loadUi("ventanas\Agregarproducto.ui", self)
+
+        self.idPro = idPro
+        self.idVen = int(idVen)
+        self.agregar.clicked.connect(self.agregaP)
+        self.leNombre.setPlaceholderText("Nombre de Refaccion")
+        self.leCantidad.setPlaceholderText("Cantidad")
+        self.lePrecio.setPlaceholderText("Precio")
+        self.producto()
+
+    def agregaP(self):
+        conexion = sqlite3.connect('puntoVenta.db')
+        consulta = conexion.cursor()
+        cantidad = int(self.leCantidad.text())
+        precio = float(self.lePrecio.text())
+        importe = float(cantidad * precio)
+        datos = (cantidad, importe, self.idPro, self.idVen)
+        sql = """INSERT INTO Concepto (cantidad, importe, refaccion, numVenta) VALUES (?,?,?,?)"""
+
+        consulta.execute(sql, datos)
+        conexion.commit()
+        conexion.close()
+        self.close()
+
+    def producto(self):
+         conexion = sqlite3.connect("puntoVenta.db")
+         consulta = conexion.cursor()
+
+         sql = """SELECT nombre, precio FROM Refaccion WHERE idRefaccion = ?"""
+         dato = (self.idPro, )
+
+         try:
+             consulta.execute(sql,dato)
+             datosDevueltos = consulta.fetchall()
+             conexion.close()
+             if datosDevueltos:
+                 for datos in datosDevueltos:
+                     self.leNombre.setText(str(datos[0]))
+                     self.lePrecio.setText(str(datos[1]))
+             else:
+                 QMessageBox.information(self, "Buscar Refaccion", "No se encontro "
+                                                               "información.   ", QMessageBox.Ok)
+         except:
+             pass
 
 
 app = QApplication(sys.argv)
