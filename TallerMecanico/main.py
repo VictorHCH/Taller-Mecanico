@@ -8,6 +8,7 @@ from PyQt5.QtGui import QPixmap, QIcon, QFont
 from PyQt5.QtCore import QSize, Qt, QRect, QTimer, QDate
 from PyQt5.QtSql import QSqlQuery, QSqlQueryModel, QSqlDatabase, QSqlTableModel
 from datetime import date
+import threading
 
 
 class VentanaPrincipal(QMainWindow):
@@ -116,6 +117,7 @@ class VentanaVenta(QMainWindow):
         self.btnConcepto.clicked.connect(self.agregarConcepto)
         self.btnConcepto.setToolTip("Agregar concepto")
 
+
     def completa(self):
         row = self.twCliente.currentRow()
         item = self.twCliente.item(row, 1)
@@ -164,6 +166,27 @@ class VentanaVenta(QMainWindow):
         otraventana = VentanaProductos(self.numVenta, self)
         otraventana.show()
         self.actualizarQuery2()
+        self.calculaTotal()
+
+    def calculaTotal(self):
+        conexion = sqlite3.connect("puntoVenta.db")
+        consulta = conexion.cursor()
+        dato = (int(self.numVenta), )
+        total = 0
+        sql = """SELECT importe FROM Concepto 
+             INNER JOIN Venta ON Venta.numVenta = Concepto.numVenta WHERE Venta.numVenta = ?"""
+
+        try:
+            consulta.execute(sql, dato)
+            datosDevueltos = consulta.fetchall()
+            conexion.close()
+            if datosDevueltos:
+                for datos in datosDevueltos:
+                    total += float(datos[0])
+        except:
+            pass
+        t = "$" + str(total)
+        self.leTotal.setText(t)
 
     def ventaNueva(self):
         conexion = sqlite3.connect('puntoVenta.db')
@@ -207,6 +230,7 @@ class VentanaVenta(QMainWindow):
             pass
 
     def actualizarQuery2(self):
+        print("actualiza")
         conexion = sqlite3.connect("puntoVenta.db")
         consulta = conexion.cursor()
 
@@ -766,25 +790,25 @@ class VentanaAgregarProducto(QMainWindow):
         self.close()
 
     def producto(self):
-         conexion = sqlite3.connect("puntoVenta.db")
-         consulta = conexion.cursor()
+        conexion = sqlite3.connect("puntoVenta.db")
+        consulta = conexion.cursor()
 
-         sql = """SELECT nombre, precio FROM Refaccion WHERE idRefaccion = ?"""
-         dato = (self.idPro, )
+        sql = """SELECT nombre, precio FROM Refaccion WHERE idRefaccion = ?"""
+        dato = (self.idPro, )
 
-         try:
-             consulta.execute(sql,dato)
-             datosDevueltos = consulta.fetchall()
-             conexion.close()
-             if datosDevueltos:
-                 for datos in datosDevueltos:
-                     self.leNombre.setText(str(datos[0]))
-                     self.lePrecio.setText(str(datos[1]))
-             else:
-                 QMessageBox.information(self, "Buscar Refaccion", "No se encontro "
+        try:
+            consulta.execute(sql,dato)
+            datosDevueltos = consulta.fetchall()
+            conexion.close()
+            if datosDevueltos:
+                for datos in datosDevueltos:
+                    self.leNombre.setText(str(datos[0]))
+                    self.lePrecio.setText(str(datos[1]))
+            else:
+                QMessageBox.information(self, "Buscar Refaccion", "No se encontro "
                                                                "información.   ", QMessageBox.Ok)
-         except:
-             pass
+        except:
+            pass
 
 
 app = QApplication(sys.argv)
