@@ -75,8 +75,9 @@ class VentanaVenta(QMainWindow):
 
         self.leCliente.setPlaceholderText("Nombre del cliente")
         self.leVehiculo.setPlaceholderText("Nombre del Vehiculo")
-        self.leCliente.textChanged.connect(self.actualizarQuery)
+        self.leCliente.textChanged.connect(self.actualizarQuery1)
 
+        #Tabla Clientes
         self.twCliente.setDragDropOverwriteMode(False)
         self.twCliente.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.twCliente.setTextElideMode(Qt.ElideRight)
@@ -92,10 +93,20 @@ class VentanaVenta(QMainWindow):
         self.twCliente.setColumnHidden(0, True)
         self.twCliente.itemClicked.connect(self.completa)
 
-        self.actualizarQuery()
+        self.actualizarQuery1()
 
-        self.modelo = QSqlTableModel(db=dba)
-        self.tvConcepto.setModel(self.modelo)
+        # Tabla Conceptos
+        self.twConcepto.setDragDropOverwriteMode(False)
+        self.twConcepto.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.twConcepto.setTextElideMode(Qt.ElideRight)
+        self.twConcepto.setWordWrap(False)
+        self.twConcepto.setSortingEnabled(False)
+        self.twConcepto.horizontalHeader().setDefaultAlignment(Qt.AlignHCenter | Qt.AlignVCenter |
+                                                              Qt.AlignCenter)
+        self.twConcepto.horizontalHeader().setHighlightSections(False)
+        self.twConcepto.horizontalHeader().setStretchLastSection(True)
+        self.twConcepto.verticalHeader().setVisible(False)
+        self.twConcepto.setAlternatingRowColors(True)
 
         # VENTANA NUEVO USUARIO
         self.btn.clicked.connect(self.btnNuevoCliente)
@@ -137,21 +148,22 @@ class VentanaVenta(QMainWindow):
         consulta = conexion.cursor()
 
         sql = """SELECT MAX(numVenta) AS numVenta FROM Venta"""
-        numVenta = ""
+        self.numVenta = ""
         try:
             consulta.execute(sql)
             datosDevueltos = consulta.fetchall()
             conexion.close()
             if datosDevueltos:
                 for datos in datosDevueltos:
-                    numVenta = datos[0]
+                    self.numVenta = datos[0]
             else:
                 QMessageBox.information(self, "Buscar venta", "No se encontro "
                                                               "información.   ", QMessageBox.Ok)
         except:
             pass
-        otraventana = VentanaProductos(numVenta, self)
+        otraventana = VentanaProductos(self.numVenta, self)
         otraventana.show()
+        self.actualizarQuery2()
 
     def ventaNueva(self):
         conexion = sqlite3.connect('puntoVenta.db')
@@ -165,7 +177,7 @@ class VentanaVenta(QMainWindow):
         conexion.commit()
         conexion.close()
 
-    def actualizarQuery(self):
+    def actualizarQuery1(self):
         conexion = sqlite3.connect("puntoVenta.db")
         consulta = conexion.cursor()
 
@@ -190,6 +202,39 @@ class VentanaVenta(QMainWindow):
                     fila += 1
             else:
                 QMessageBox.information(self, "Buscar venta", "No se encontro "
+                                                                "información.   ", QMessageBox.Ok)
+        except:
+            pass
+
+    def actualizarQuery2(self):
+        conexion = sqlite3.connect("puntoVenta.db")
+        consulta = conexion.cursor()
+
+        idVen = int(self.numVenta)
+        print(idVen)
+        dato = (idVen, )
+
+        sql = """SELECT Venta.numVenta, Refaccion.nombre, Refaccion.precio, Concepto.cantidad, importe FROM Concepto INNER JOIN Refaccion ON Refaccion.idRefaccion = Concepto.refaccion
+                INNER JOIN Venta ON Venta.numVenta = Concepto.numVenta WHERE Venta.numVenta = ?"""
+        try:
+            consulta.execute(sql, dato)
+            datosDevueltos = consulta.fetchall()
+            conexion.close()
+
+            if datosDevueltos:
+                fila = 0
+                for datos in datosDevueltos:
+                    self.twConcepto.setRowCount(fila + 1)
+
+                    self.twConcepto.setItem(fila, 0, QTableWidgetItem(str(datos[0])))
+                    self.twConcepto.setItem(fila, 1, QTableWidgetItem(str(datos[1])))
+                    self.twConcepto.setItem(fila, 2, QTableWidgetItem(str(datos[2])))
+                    self.twConcepto.setItem(fila, 3, QTableWidgetItem(str(datos[3])))
+                    self.twConcepto.setItem(fila, 4, QTableWidgetItem(str(datos[4])))
+
+                    fila += 1
+            else:
+                QMessageBox.information(self, "Buscar concepto", "No se encontro "
                                                                 "información.   ", QMessageBox.Ok)
         except:
             pass
