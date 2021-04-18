@@ -711,7 +711,7 @@ class VentanaRegistroProducto(QMainWindow):
         self.pushButton.clicked.connect(self.aceptar)
 
     def cancelar(self):
-        self.hide()
+        self.close()
 
     def aceptar(self):
         idP = self.lineEdit.text()
@@ -951,9 +951,9 @@ class VentanaBorrarCliente(QMainWindow):
 def borrarCliente(id):
     conexion = sqlite3.connect('puntoVenta.db')
     consulta = conexion.cursor()
-
+    dato = (id, )
     sql = """DELETE FROM Cliente WHERE (idCliente = ?)"""
-    consulta.execute(sql, id)
+    consulta.execute(sql, dato)
     conexion.commit()
     conexion.close()
 
@@ -1020,10 +1020,11 @@ def busqueda2(id):
     conexion = sqlite3.connect('puntoVenta.db')
     consulta = conexion.cursor()
     datos = ("", "", "", "")
+    dato = (id, )
     sql = """SELECT nombre, precio, cantidad, uniMedida FROM Refaccion WHERE (idRefaccion = ?)"""
     encontro = False
     try:
-        consulta.execute(sql, id)
+        consulta.execute(sql, dato)
         for i in consulta:
             datos = (i[0], i[1], i[2], i[3])
             encontro = True
