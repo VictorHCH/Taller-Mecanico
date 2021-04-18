@@ -112,6 +112,9 @@ class VentanaVenta(QMainWindow):
         self.actualizarQuery1()
 
         # Tabla Conceptos
+        delegateFloat = InitialDelegate(2, self.twConcepto)
+        self.twConcepto.setItemDelegateForColumn(4, delegateFloat)
+        self.twConcepto.setItemDelegateForColumn(2, delegateFloat)
         self.twConcepto.setDragDropOverwriteMode(False)
         self.twConcepto.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.twConcepto.setTextElideMode(Qt.ElideRight)
@@ -132,6 +135,82 @@ class VentanaVenta(QMainWindow):
         self.btnConcepto.clicked.connect(self.agregarConcepto)
         self.btnConcepto.setToolTip("Agregar concepto")
 
+        #Actualizar
+        self.btnActualizar.clicked.connect(self.actualizar)
+
+        #borrar
+        self.btnBorrar.clicked.connect(self.borrar)
+
+        #Venta
+        self.btnVenta.clicked.connect(self.venta)
+
+        #cancelar venta
+        self.btnCancelar.clicked.connect(self.borrarVenta)
+
+        #boton regresa
+        self.btnRegresa.clicked.connect(self.regresarMenu)
+
+    def regresarMenu(self):
+        self.borrarVenta()
+        self.menuPrincipal()
+
+    def menuPrincipal(self):
+        self.close()
+        otraventana = MenuPrincipal(self)
+        otraventana.show()
+
+    def borrarVenta(self):
+        conexion = sqlite3.connect('puntoVenta.db')
+        consulta = conexion.cursor()
+        dato = (int(self.numVenta), )
+        #Borra conceptos
+        sql = """DELETE FROM Concepto WHERE numVenta = ?"""
+
+        consulta.execute(sql, dato)
+        conexion.commit()
+        #Borrar Venta
+        sql = """DELETE FROM Venta WHERE numVenta = ?"""
+
+        consulta.execute(sql, dato)
+        conexion.commit()
+        conexion.close()
+        self.menuPrincipal()
+
+    def venta(self):
+        conexion = sqlite3.connect('puntoVenta.db')
+        consulta = conexion.cursor()
+        vehiculo = self.leVehiculo.text()
+        total = int(self.total)
+        item = self.twCliente.item(0, 0)
+        cliente = int(item.text())
+        idVenta = self.numVenta
+        datos = (vehiculo, total, cliente, idVenta)
+
+        sql = """UPDATE Venta SET vehiculo = ?, total = ?, cliente = ? WHERE (numVenta = ?)"""
+
+        consulta.execute(sql, datos)
+        conexion.commit()
+        conexion.close()
+        self.menuPrincipal()
+
+    def borrar(self):
+        row = self.twConcepto.currentRow()
+        item = self.twConcepto.item(row, 0)
+        idb = int(item.text())
+        dato = (idb, )
+        conexion = sqlite3.connect('puntoVenta.db')
+        consulta = conexion.cursor()
+
+        sql = """DELETE FROM Concepto WHERE (idConcepto = ?)"""
+        consulta.execute(sql, dato)
+        conexion.commit()
+        conexion.close()
+        self.actualizarQuery2()
+        self.calculaTotal()
+
+    def actualizar(self):
+        self.actualizarQuery2()
+        self.calculaTotal()
 
     def completa(self):
         row = self.twCliente.currentRow()
@@ -160,7 +239,7 @@ class VentanaVenta(QMainWindow):
         otraventana = VentanaClienteNuevo(self)
         otraventana.show()
 
-    def agregarConcepto(self):
+    def numeroVenta(self):
         conexion = sqlite3.connect("puntoVenta.db")
         consulta = conexion.cursor()
 
@@ -173,11 +252,10 @@ class VentanaVenta(QMainWindow):
             if datosDevueltos:
                 for datos in datosDevueltos:
                     self.numVenta = datos[0]
-            else:
-                QMessageBox.information(self, "Buscar venta", "No se encontro "
-                                                              "información.   ", QMessageBox.Ok)
         except:
             pass
+
+    def agregarConcepto(self):
         otraventana = VentanaProductos(self.numVenta, self)
         otraventana.show()
         self.actualizarQuery2()
@@ -187,7 +265,7 @@ class VentanaVenta(QMainWindow):
         conexion = sqlite3.connect("puntoVenta.db")
         consulta = conexion.cursor()
         dato = (int(self.numVenta), )
-        total = 0
+        self.total = 0
         sql = """SELECT importe FROM Concepto 
              INNER JOIN Venta ON Venta.numVenta = Concepto.numVenta WHERE Venta.numVenta = ?"""
 
@@ -197,11 +275,10 @@ class VentanaVenta(QMainWindow):
             conexion.close()
             if datosDevueltos:
                 for datos in datosDevueltos:
-                    total += float(datos[0])
+                    self.total += float(datos[0])
         except:
             pass
-        t = "$" + str(total)
-        self.leTotal.setText(t)
+        self.leTotal.setText("${:,.{}f}".format(self.total, 2))
 
     def ventaNueva(self):
         conexion = sqlite3.connect('puntoVenta.db')
@@ -214,6 +291,7 @@ class VentanaVenta(QMainWindow):
         consulta.execute(sql, f)
         conexion.commit()
         conexion.close()
+        self.numeroVenta()
 
     def actualizarQuery1(self):
         conexion = sqlite3.connect("puntoVenta.db")
@@ -238,22 +316,17 @@ class VentanaVenta(QMainWindow):
                     self.twCliente.setItem(fila, 1, QTableWidgetItem(str(datos[1])))
 
                     fila += 1
-            else:
-                QMessageBox.information(self, "Buscar venta", "No se encontro "
-                                                                "información.   ", QMessageBox.Ok)
         except:
             pass
 
     def actualizarQuery2(self):
-        print("actualiza")
         conexion = sqlite3.connect("puntoVenta.db")
         consulta = conexion.cursor()
 
         idVen = int(self.numVenta)
-        print(idVen)
         dato = (idVen, )
 
-        sql = """SELECT Venta.numVenta, Refaccion.nombre, Refaccion.precio, Concepto.cantidad, importe FROM Concepto INNER JOIN Refaccion ON Refaccion.idRefaccion = Concepto.refaccion
+        sql = """SELECT idConcepto, Refaccion.nombre, Refaccion.precio, Concepto.cantidad, importe FROM Concepto INNER JOIN Refaccion ON Refaccion.idRefaccion = Concepto.refaccion
                 INNER JOIN Venta ON Venta.numVenta = Concepto.numVenta WHERE Venta.numVenta = ?"""
         try:
             consulta.execute(sql, dato)
@@ -272,9 +345,6 @@ class VentanaVenta(QMainWindow):
                     self.twConcepto.setItem(fila, 4, QTableWidgetItem(str(datos[4])))
 
                     fila += 1
-            else:
-                QMessageBox.information(self, "Buscar concepto", "No se encontro "
-                                                                "información.   ", QMessageBox.Ok)
         except:
             pass
 
@@ -467,8 +537,13 @@ class VentanaRegistros(QMainWindow):
         self.tableWidget.setSelectionBehavior(QTableView.SelectRows)
         self.tableWidget.itemDoubleClicked.connect(self.detalleVenta)
         self.tableWidget.setAlternatingRowColors(True)
+        delegateFloat = InitialDelegate(2, self.tableWidget)
+        self.tableWidget.setItemDelegateForColumn(4, delegateFloat)
 
         self.actualizarQuery()
+
+        #Boton regresar menu
+        self.btnMenu.clicked.connect(self.menuPrincipal)
 
     def detalleVenta(self):
         row = self.tableWidget.currentRow()
@@ -477,6 +552,10 @@ class VentanaRegistros(QMainWindow):
             otraventana = VentanaDetalleRegistro(item.text(), self)
             otraventana.show()
 
+    def menuPrincipal(self):
+        self.close()
+        otraventana = MenuPrincipal(self)
+        otraventana.show()
 
     def btnVenta(self):
         self.hide()
@@ -617,9 +696,6 @@ class VentanaProductos(QMainWindow):
                     self.tableWidget.setItem(fila, 2, QTableWidgetItem(str(datos[2])))
 
                     fila += 1
-            else:
-                QMessageBox.information(self, "Buscar venta", "No se encontro "
-                                                              "información.   ", QMessageBox.Ok)
         except:
             pass
 
@@ -683,6 +759,7 @@ class VentanaDetalleRegistro(QMainWindow):
 
         self.id = id
         delegateFloat = InitialDelegate(2, self.tableView)
+        self.tableView.setItemDelegateForColumn(3, delegateFloat)
         self.tableView.setItemDelegateForColumn(4, delegateFloat)
         self.modelo = QSqlQueryModel()
         self.tableView.setModel(self.modelo)
@@ -729,6 +806,7 @@ class VentanaAgregarProducto(QMainWindow):
         self.leCantidad.setPlaceholderText("Cantidad")
         self.lePrecio.setPlaceholderText("Precio")
         self.producto()
+        self.leCantidad.setFocus()
 
     def agregaP(self):
         conexion = sqlite3.connect('puntoVenta.db')
@@ -759,9 +837,6 @@ class VentanaAgregarProducto(QMainWindow):
                 for datos in datosDevueltos:
                     self.leNombre.setText(str(datos[0]))
                     self.lePrecio.setText(str(datos[1]))
-            else:
-                QMessageBox.information(self, "Buscar Refaccion", "No se encontro "
-                                                               "información.   ", QMessageBox.Ok)
         except:
             pass
 

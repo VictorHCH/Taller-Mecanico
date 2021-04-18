@@ -124,7 +124,7 @@ color: rgb(206, 18, 18);</string>
      <rect>
       <x>570</x>
       <y>530</y>
-      <width>52</width>
+      <width>81</width>
       <height>22</height>
      </rect>
     </property>
@@ -137,7 +137,7 @@ color: rgb(206, 18, 18);</string>
      </font>
     </property>
     <property name="text">
-     <string>Total:</string>
+     <string>Total: $</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
@@ -146,9 +146,9 @@ color: rgb(206, 18, 18);</string>
    <widget class="QLabel" name="leTotal">
     <property name="geometry">
      <rect>
-      <x>720</x>
+      <x>649</x>
       <y>530</y>
-      <width>50</width>
+      <width>121</width>
       <height>22</height>
      </rect>
     </property>
@@ -161,7 +161,7 @@ color: rgb(206, 18, 18);</string>
      </font>
     </property>
     <property name="text">
-     <string>$0.00</string>
+     <string>0.00</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -186,7 +186,7 @@ color: rgb(206, 18, 18);</string>
      <string notr="true">background-color: rgb(255, 255, 255);</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton">
+   <widget class="QPushButton" name="btnVenta">
     <property name="geometry">
      <rect>
       <x>650</x>
@@ -233,7 +233,7 @@ color: rgb(206, 18, 18);</string>
      </property>
     </column>
    </widget>
-   <widget class="QPushButton" name="pushButton_4">
+   <widget class="QPushButton" name="btnBorrar">
     <property name="geometry">
      <rect>
       <x>230</x>
@@ -311,7 +311,7 @@ color: rgb(206, 18, 18);</string>
      </property>
     </column>
    </widget>
-   <widget class="QPushButton" name="pushButton_2">
+   <widget class="QPushButton" name="btnCancelar">
     <property name="geometry">
      <rect>
       <x>510</x>
@@ -335,17 +335,54 @@ color: rgb(206, 18, 18);</string>
      <string>Cancelar</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_3">
+   <widget class="QPushButton" name="btnActualizar">
     <property name="geometry">
      <rect>
-      <x>700</x>
+      <x>340</x>
+      <y>180</y>
+      <width>93</width>
+      <height>33</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>ITC Avant Garde Std Bk Cn</family>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(155, 155, 155);
+color: rgb(206, 18, 18);</string>
+    </property>
+    <property name="text">
+     <string>Agregar</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btnRegresa">
+    <property name="geometry">
+     <rect>
+      <x>660</x>
       <y>30</y>
-      <width>51</width>
+      <width>91</width>
       <height>41</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <family>ITC Avant Garde Std Bk Cn</family>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(155, 155, 155);
+color: rgb(206, 18, 18);</string>
+    </property>
     <property name="text">
-     <string>PushButton</string>
+     <string>Regresa</string>
     </property>
    </widget>
   </widget>
