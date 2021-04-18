@@ -2,17 +2,19 @@ import sys
 import sqlite3
 import time
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QAction, QToolBar, QTableView, QVBoxLayout, QLineEdit, QHBoxLayout,
-                             QWidget, QPushButton, QHeaderView, QStyledItemDelegate, QDateEdit, QMessageBox)
+                             QWidget, QPushButton, QHeaderView, QStyledItemDelegate, QDateEdit, QMessageBox, QTableWidgetItem, QAbstractItemView)
 from PyQt5.uic import loadUi
 from PyQt5.QtGui import QPixmap, QIcon, QFont
 from PyQt5.QtCore import QSize, Qt, QRect, QTimer, QDate
 from PyQt5.QtSql import QSqlQuery, QSqlQueryModel, QSqlDatabase, QSqlTableModel
+from datetime import date
+
 
 class VentanaPrincipal(QMainWindow):
     def __init__(self, parent=None):
         super(VentanaPrincipal, self).__init__(parent)
         loadUi('ventanas\Inicio.ui', self)
-        self.lb.setPixmap(QPixmap("JL.png"))
+        self.lb.setPixmap(QPixmap("Fondo.png"))
         self.lb.setScaledContents(True)
 
         self.pb.setMaximum(100)
@@ -31,52 +33,8 @@ class VentanaPrincipal(QMainWindow):
             self.timer.stop()
             self.pb.setValue(0)
             self.hide()
-            otraventana = MenuPrincipal(self)
+            otraventana = VentanaVenta(self)
             otraventana.show()
-
-
-class MenuPrincipal(QMainWindow):
-    def __init__(self, parent=None):
-        super(MenuPrincipal, self).__init__(parent)
-        loadUi('ventanas\MenuPrincipal.ui', self)
-
-        self.btn.setIconSize(QSize(200, 200))
-        self.btn.setIcon(QIcon('iconos/venta.ico'))
-        self.btn.setToolTip("Venta")
-        self.btn_4.setIconSize(QSize(200, 200))
-        self.btn_4.setIcon(QIcon('iconos/cliente.ico'))
-        self.btn_4.setToolTip("Clientes")
-        self.btn_3.setIconSize(QSize(200, 200))
-        self.btn_3.setIcon(QIcon('iconos/inv.ico'))
-        self.btn_3.setToolTip("Inventario")
-        self.btn_2.setIconSize(QSize(200, 200))
-        self.btn_2.setIcon(QIcon('iconos/registro.ico'))
-        self.btn_2.setToolTip("Registro de ventas")
-
-        self.btn.clicked.connect(self.venta)
-        self.btn_2.clicked.connect(self.registro)
-        self.btn_3.clicked.connect(self.inventario)
-        self.btn_4.clicked.connect(self.clientes)
-
-    def venta(self):
-        self.hide()
-        otraventana = VentanaVenta(self)
-        otraventana.show()
-
-    def clientes(self):
-        self.hide()
-        otraventana = VentanaClientes(self)
-        otraventana.show()
-
-    def inventario(self):
-        self.hide()
-        otraventana = VentanaInventario(self)
-        otraventana.show()
-
-    def registro(self):
-        self.hide()
-        otraventana = VentanaRegistros(self)
-        otraventana.show()
 
 
 class VentanaVenta(QMainWindow):
@@ -84,52 +42,87 @@ class VentanaVenta(QMainWindow):
         super(VentanaVenta, self).__init__(parent)
         loadUi('ventanas\Venta.ui', self)
 
-        self.btn_2.setIconSize(QSize(50, 40))
-        self.btn_2.setIcon(QIcon('iconos/menu.ico'))
-        self.btn_2.setToolTip("Menú principal")
-        self.btn.setIconSize(QSize(40, 30))
-        self.btn.setIcon(QIcon('iconos/agregar.ico'))
-        self.pushButton_3.setIconSize(QSize(40, 30))
+        barra = QToolBar()
+        barra.setIconSize(QSize(30, 30))
+        self.addToolBar(barra)
 
-        self.modelo = QSqlQueryModel()
-        self.tableView.setModel(self.modelo)
-        self.tableView.setWordWrap(True)
-        self.tableView.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
-        self.tableView.horizontalHeader().setFont(QFont("ITC Avant Garde Std Bk Cn", 10, QFont.Bold))
-        self.tableView.verticalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
+        venta = QAction(QIcon("iconos/venta.ico"), "Venta", self)
+        venta.triggered.connect(self.btnVenta)
+        barra.addAction(venta)
 
-        self.query = QSqlQuery(db=dba)
+        barra.addSeparator()
 
-        self.query.prepare(
-            "SELECT idConcepto, refaccion, cantidad, importe, numVenta FROM Concepto"
-        )
+        cliente = QAction(QIcon("iconos/cliente.ico"), "Clientes", self)
+        cliente.triggered.connect(self.btnCliente)
+        barra.addAction(cliente)
+
+        barra.addSeparator()
+
+        inv = QAction(QIcon("iconos/inv.ico"), "Inventario", self)
+        inv.triggered.connect(self.btnInv)
+        barra.addAction(inv)
+
+        barra.addSeparator()
+
+        reg = QAction(QIcon("iconos/registro.ico"), "Registro de ventas", self)
+        reg.triggered.connect(self.btnReg)
+        barra.addAction(reg)
+
+        barra.addSeparator()
+
+        #venta nueva
+        self.ventaNueva()
+
+        self.leCliente.setPlaceholderText("Nombre del cliente")
+        self.leVehiculo.setPlaceholderText("Nombre del Vehiculo")
+        self.leCliente.textChanged.connect(self.actualizarQuery)
+
+        self.twCliente.setDragDropOverwriteMode(False)
+        self.twCliente.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.twCliente.setTextElideMode(Qt.ElideRight)
+        self.twCliente.setWordWrap(False)
+        self.twCliente.setSortingEnabled(False)
+        self.twCliente.horizontalHeader().setDefaultAlignment(Qt.AlignHCenter | Qt.AlignVCenter |
+                                                              Qt.AlignCenter)
+        self.twCliente.horizontalHeader().setHighlightSections(False)
+        self.twCliente.horizontalHeader().setStretchLastSection(True)
+        self.twCliente.verticalHeader().setVisible(False)
+        self.twCliente.horizontalHeader().setVisible(False)
+        self.twCliente.setAlternatingRowColors(True)
+        self.twCliente.setColumnHidden(0, True)
+        self.twCliente.itemClicked.connect(self.completa)
+
         self.actualizarQuery()
 
-        self.modelo.setHeaderData(0, Qt.Horizontal, "#")
-        self.modelo.setHeaderData(1, Qt.Horizontal, "Concepto")
-        self.modelo.setHeaderData(2, Qt.Horizontal, "Cantidad")
-        self.modelo.setHeaderData(3, Qt.Horizontal, "Importe")
-        self.modelo.removeColumn(4)
-
-        self.btn_2.clicked.connect(self.menuPrincipal)
-        self.pushButton_2.clicked.connect(self.cancelar)
-
-        #VENTANA NUEVO USUARIO
+        # VENTANA NUEVO USUARIO
         self.btn.clicked.connect(self.btnNuevoCliente)
         self.btn.setToolTip("Agregar nuevo cliente")
 
-        #Ventana agregar concepto
-        self.pushButton_3.clicked.connect(self.agregarConcepto)
-        self.pushButton_3.setToolTip("Agregar concepto")
+        # Ventana agregar concepto
+        self.btnConcepto.clicked.connect(self.agregarConcepto)
+        self.btnConcepto.setToolTip("Agregar concepto")
 
-    def menuPrincipal(self):
+    def completa(self):
+        row = self.twCliente.currentRow()
+        item = self.twCliente.item(row, 1)
+        self.leCliente.setText(item.text())
+
+    def btnVenta(self):
+        pass
+
+    def btnCliente(self):
         self.hide()
-        otraventana = MenuPrincipal(self)
+        otraventana = VentanaClientes(self)
         otraventana.show()
 
-    def cancelar(self):
+    def btnInv(self, s):
         self.hide()
-        otraventana = MenuPrincipal(self)
+        otraventana = VentanaInventario(self)
+        otraventana.show()
+
+    def btnReg(self, s):
+        self.hide()
+        otraventana = VentanaRegistros(self)
         otraventana.show()
 
     def btnNuevoCliente(self):
@@ -137,18 +130,100 @@ class VentanaVenta(QMainWindow):
         otraventana.show()
 
     def agregarConcepto(self):
-        otraventana = VentanaProductos(self)
+        conexion = sqlite3.connect("puntoVenta.db")
+        consulta = conexion.cursor()
+
+        sql = """SELECT MAX(numVenta) AS numVenta FROM Venta"""
+        numVenta = ""
+        try:
+            consulta.execute(sql)
+            datosDevueltos = consulta.fetchall()
+            conexion.close()
+            if datosDevueltos:
+                for datos in datosDevueltos:
+                    numVenta = datos[0]
+            else:
+                QMessageBox.information(self, "Buscar venta", "No se encontro "
+                                                              "información.   ", QMessageBox.Ok)
+        except:
+            pass
+        otraventana = VentanaProductos(numVenta, self)
         otraventana.show()
 
+    def ventaNueva(self):
+        conexion = sqlite3.connect('puntoVenta.db')
+        consulta = conexion.cursor()
+        fecha = date.today()
+        f = (fecha.strftime("%Y-%m-%d"), )
+
+        sql = """INSERT INTO Venta VALUES (NULL, ?, "", 0, 0)"""
+
+        consulta.execute(sql, f)
+        conexion.commit()
+        conexion.close()
+
     def actualizarQuery(self):
-        self.query.exec_()
-        self.modelo.setQuery(self.query)
+        conexion = sqlite3.connect("puntoVenta.db")
+        consulta = conexion.cursor()
+
+        dato = ("%"+self.leCliente.text()+"%", self.leCliente.text())
+
+        sql = """SELECT idCliente, nombre FROM Cliente
+        WHERE nombre LIKE ? OR idCliente = ?"""
+
+        try:
+            consulta.execute(sql, dato)
+            datosDevueltos = consulta.fetchall()
+            conexion.close()
+
+            if datosDevueltos:
+                fila = 0
+                for datos in datosDevueltos:
+                    self.twCliente.setRowCount(fila + 1)
+
+                    self.twCliente.setItem(fila, 0, QTableWidgetItem(str(datos[0])))
+                    self.twCliente.setItem(fila, 1, QTableWidgetItem(str(datos[1])))
+
+                    fila += 1
+            else:
+                QMessageBox.information(self, "Buscar venta", "No se encontro "
+                                                                "información.   ", QMessageBox.Ok)
+        except:
+            pass
 
 
 class VentanaClientes(QMainWindow):
     def __init__(self, parent=None):
         super(VentanaClientes, self).__init__(parent)
         loadUi('ventanas\Clientes.ui', self)
+
+        barra = QToolBar()
+        barra.setIconSize(QSize(30, 30))
+        self.addToolBar(barra)
+
+        venta = QAction(QIcon("iconos/venta.ico"), "Venta", self)
+        venta.triggered.connect(self.btnVenta)
+        barra.addAction(venta)
+
+        barra.addSeparator()
+
+        cliente = QAction(QIcon("iconos/cliente.ico"), "Clientes", self)
+        cliente.triggered.connect(self.btnCliente)
+        barra.addAction(cliente)
+
+        barra.addSeparator()
+
+        inv = QAction(QIcon("iconos/inv.ico"), "Inventario", self)
+        inv.triggered.connect(self.btnInv)
+        barra.addAction(inv)
+
+        barra.addSeparator()
+
+        reg = QAction(QIcon("iconos/registro.ico"), "Registro de ventas", self)
+        reg.triggered.connect(self.btnReg)
+        barra.addAction(reg)
+
+        barra.addSeparator()
 
         self.lineEdit.setPlaceholderText("Nombre del cliente")
         self.lineEdit.textChanged.connect(self.actualizarQuery)
@@ -157,8 +232,19 @@ class VentanaClientes(QMainWindow):
         self.tableView.setModel(self.modelo)
         self.tableView.setWordWrap(True)
         self.tableView.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
-        self.tableView.horizontalHeader().setFont(QFont("Franklin Gothic Book", 11, QFont.Bold))
+        self.tableView.horizontalHeader().setFont(QFont("ITC Avant Garde Std Bk Cn", 10, QFont.Bold))
         self.tableView.verticalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
+        self.tableView.setDragDropOverwriteMode(False)
+        self.tableView.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.tableView.setTextElideMode(Qt.ElideRight)
+        self.tableView.setWordWrap(False)
+        self.tableView.setSortingEnabled(False)
+        self.tableView.horizontalHeader().setDefaultAlignment(Qt.AlignHCenter | Qt.AlignVCenter |
+                                                              Qt.AlignCenter)
+        self.tableView.horizontalHeader().setHighlightSections(False)
+        self.tableView.horizontalHeader().setStretchLastSection(True)
+        self.tableView.verticalHeader().setVisible(False)
+        self.tableView.setAlternatingRowColors(True)
 
         self.query = QSqlQuery(db=dba)
 
@@ -168,46 +254,30 @@ class VentanaClientes(QMainWindow):
         )
         self.actualizarQuery()
 
-        self.modelo.setHeaderData(0, Qt.Horizontal, "#")
-        self.modelo.setHeaderData(1, Qt.Horizontal, "Nombre")
-        self.modelo.setHeaderData(2, Qt.Horizontal, "Teléfono")
-
         # VENTANA NUEVO USUARIO
-        self.btn.setIconSize(QSize(40, 30))
-        self.btn.setIcon(QIcon('iconos/agregar.ico'))
         self.btn.clicked.connect(self.btnNuevoCliente)
         self.btn.setToolTip("Agregar nuevo cliente")
 
-        self.btn_4.setIconSize(QSize(50, 40))
-        self.btn_4.setIcon(QIcon('iconos\menu.ico'))
-        self.btn_4.setToolTip("Menú principal")
-        self.btn_4.clicked.connect(self.menuPrincipal)
-
-        self.btn_2.setIconSize(QSize(40, 30))
-        self.btn_2.setIcon(QIcon('iconos/editar.ico'))
-        self.btn_2.setToolTip("Editar cliente")
-        self.btn_2.clicked.connect(self.editar)
-
-        self.btn_3.setIconSize(QSize(40, 30))
-        self.btn_3.setIcon(QIcon('iconos/borrar.ico'))
-        self.btn_3.setToolTip("Borrar cliente")
-        self.btn_3.clicked.connect(self.borrar)
-
-    def menuPrincipal(self):
+    def btnVenta(self):
         self.hide()
-        otraventana = MenuPrincipal(self)
+        otraventana = VentanaVenta(self)
+        otraventana.show()
+
+    def btnCliente(self):
+        pass
+
+    def btnInv(self, s):
+        self.hide()
+        otraventana = VentanaInventario(self)
+        otraventana.show()
+
+    def btnReg(self, s):
+        self.hide()
+        otraventana = VentanaRegistros(self)
         otraventana.show()
 
     def btnNuevoCliente(self):
         otraventana = VentanaClienteNuevo(self)
-        otraventana.show()
-
-    def editar(self):
-        otraventana = VentanaEditarCliente(self)
-        otraventana.show()
-
-    def borrar(self):
-        otraventana = VentanaBorrarCliente(self)
         otraventana.show()
 
     def actualizarQuery(self):
@@ -223,6 +293,34 @@ class VentanaInventario(QMainWindow):
         super(VentanaInventario, self).__init__(parent)
         loadUi('ventanas\Inventario.ui', self)
 
+        barra = QToolBar()
+        barra.setIconSize(QSize(30, 30))
+        self.addToolBar(barra)
+
+        venta = QAction(QIcon("iconos/venta.ico"), "Venta", self)
+        venta.triggered.connect(self.btnVenta)
+        barra.addAction(venta)
+
+        barra.addSeparator()
+
+        cliente = QAction(QIcon("iconos/cliente.ico"), "Clientes", self)
+        cliente.triggered.connect(self.btnCliente)
+        barra.addAction(cliente)
+
+        barra.addSeparator()
+
+        inv = QAction(QIcon("iconos/inv.ico"), "Inventario", self)
+        inv.triggered.connect(self.btnInv)
+        barra.addAction(inv)
+
+        barra.addSeparator()
+
+        reg = QAction(QIcon("iconos/registro.ico"), "Registro de ventas", self)
+        reg.triggered.connect(self.btnReg)
+        barra.addAction(reg)
+
+        barra.addSeparator()
+
         self.lineEdit.setPlaceholderText("Nombre del producto")
         self.lineEdit.textChanged.connect(self.actualizarQuery)
 
@@ -230,8 +328,19 @@ class VentanaInventario(QMainWindow):
         self.tableView.setModel(self.modelo)
         self.tableView.setWordWrap(True)
         self.tableView.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
-        self.tableView.horizontalHeader().setFont(QFont("Franklin Gothic Book", 11, QFont.Bold))
+        self.tableView.horizontalHeader().setFont(QFont("ITC Avant Garde Std Bk Cn", 9, QFont.Bold))
         self.tableView.verticalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
+        self.tableView.setDragDropOverwriteMode(False)
+        self.tableView.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.tableView.setTextElideMode(Qt.ElideRight)
+        self.tableView.setWordWrap(False)
+        self.tableView.setSortingEnabled(False)
+        self.tableView.horizontalHeader().setDefaultAlignment(Qt.AlignHCenter | Qt.AlignVCenter |
+                                                              Qt.AlignCenter)
+        self.tableView.horizontalHeader().setHighlightSections(False)
+        self.tableView.horizontalHeader().setStretchLastSection(True)
+        self.tableView.verticalHeader().setVisible(False)
+        self.tableView.setAlternatingRowColors(True)
 
         self.query = QSqlQuery(db=dba)
 
@@ -252,37 +361,26 @@ class VentanaInventario(QMainWindow):
         #Agregar producto
         self.btn_2.clicked.connect(self.agregarProducto)
         self.btn_2.setToolTip("Agregar producto")
-        self.btn_2.setIconSize(QSize(40, 30))
-        self.btn_2.setIcon(QIcon('iconos/agregar.ico'))
 
-        self.btn_5.setIconSize(QSize(50, 40))
-        self.btn_5.setIcon(QIcon('iconos/menu.ico'))
-        self.btn_5.setToolTip("Menú principal")
-        self.btn_5.clicked.connect(self.menuPrincipal)
+        #Pruebas
 
-        self.btn_3.setIconSize(QSize(40, 30))
-        self.btn_3.setIcon(QIcon('iconos/editar.ico'))
-        self.btn_3.setToolTip("Editar producto")
-        self.btn_3.clicked.connect(self.editar)
-
-        self.btn_4.setIconSize(QSize(40, 30))
-        self.btn_4.setIcon(QIcon('iconos/borrar.ico'))
-        self.btn_4.setToolTip("Borrar producto")
-        self.btn_4.clicked.connect(self.borrar)
-
-    def menuPrincipal(self):
+    def btnVenta(self):
         self.hide()
-        otraventana = MenuPrincipal(self)
+        otraventana = VentanaVenta(self)
         otraventana.show()
 
-    def editar(self):
-        otraventana = VentanaEditarProducto(self)
+    def btnCliente(self):
+        self.hide()
+        otraventana = VentanaClientes(self)
         otraventana.show()
 
-    def borrar(self):
-        otraventana = VentanaBorrarProducto(self)
-        otraventana.show()
+    def btnInv(self, s):
+        pass
 
+    def btnReg(self, s):
+        self.hide()
+        otraventana = VentanaRegistros(self)
+        otraventana.show()
 
     def agregarProducto(self):
         otraventana = VentanaRegistroProducto(self)
@@ -336,39 +434,22 @@ class VentanaRegistros(QMainWindow):
         self.dateEdit.setCursor(Qt.PointingHandCursor)
 
         self.lineEdit.setPlaceholderText("Nombre del cliente")
-        self.lineEdit.textChanged.connect(self.actualizarQuery1)
-        self.dateEdit.dateChanged.connect(self.actualizarQuery1)
-        self.btnDetalle.clicked.connect(self.actualizarQuery2)
+        self.lineEdit.textChanged.connect(self.actualizarQuery)
+        self.dateEdit.dateChanged.connect(self.actualizarQuery)
 
-        self.modelo1 = QSqlQueryModel()
-        self.modelo2 = QSqlQueryModel()
-        self.tableView.setModel(self.modelo1)
-        self.tableView_2.setModel(self.modelo2)
-        self.tableView.setWordWrap(True)
-        self.tableView.horizontalHeader().setStretchLastSection(True)
-        self.tableView.verticalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
-        self.tableView_2.setWordWrap(True)
-        self.tableView_2.horizontalHeader().setStretchLastSection(True)
-        self.tableView_2.verticalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
+        self.tableWidget.setSelectionBehavior(QTableView.SelectRows)
+        self.tableWidget.itemDoubleClicked.connect(self.detalleVenta)
+        self.tableWidget.setAlternatingRowColors(True)
 
-        self.query1 = QSqlQuery(db=dba)
+        self.actualizarQuery()
 
-        self.query1.prepare(
-            "SELECT Venta.numVenta, nombre, Venta.vehiculo, Venta.fecha, Venta.total FROM Cliente "
-            "INNER JOIN Venta ON Venta.cliente = Cliente.idCliente "
-            "WHERE Cliente.nombre LIKE '%' || :nombreCliente || '%' AND "
-            "Venta.fecha LIKE '%' || :fechaVenta || '%'"
-        )
-        self.actualizarQuery1()
+    def detalleVenta(self):
+        row = self.tableWidget.currentRow()
+        item = self.tableWidget.item(row, 0)
+        if item is not None:
+            otraventana = VentanaDetalleRegistro(item.text(), self)
+            otraventana.show()
 
-        self.query2 = QSqlQuery(db=dba)
-
-        self.query2.prepare(
-            "SELECT idConcepto, Refaccion.nombre, Concepto.cantidad, Refaccion.precio, importe FROM Concepto "
-            "INNER JOIN Refaccion ON Refaccion.idRefaccion = Concepto.refaccion "
-            "INNER JOIN Venta ON Venta.numVenta = Concepto.numVenta "
-            "WHERE Venta.numVenta = :numVenta"
-        )
 
     def btnVenta(self):
         self.hide()
@@ -388,21 +469,36 @@ class VentanaRegistros(QMainWindow):
     def btnReg(self, s):
         pass
 
-    def actualizarQuery1(self):
-        nombreCliente = self.lineEdit.text()
-        fechaVenta = self.dateEdit.text()
-        self.query1.bindValue(":nombreCliente", nombreCliente)
-        self.query1.bindValue(":fechaVenta", fechaVenta)
+    def actualizarQuery(self):
+        conexion = sqlite3.connect("puntoVenta.db")
+        consulta = conexion.cursor()
 
-        self.query1.exec_()
-        self.modelo1.setQuery(self.query1)
+        dato = ("%"+self.lineEdit.text()+"%", "%"+self.dateEdit.text()+"%")
 
-    def actualizarQuery2(self):
-        numVenta = self.detalles.text()
-        self.query2.bindValue(":numVenta", numVenta)
+        sql = """SELECT Venta.numVenta, nombre, Venta.vehiculo, Venta.fecha, Venta.total FROM Cliente INNER JOIN Venta ON Venta.cliente = Cliente.idCliente
+        WHERE Cliente.nombre LIKE ? AND Venta.fecha LIKE ?"""
+        try:
+            consulta.execute(sql, dato)
+            datosDevueltos = consulta.fetchall()
+            conexion.close()
 
-        self.query2.exec_()
-        self.modelo2.setQuery(self.query2)
+            if datosDevueltos:
+                fila = 0
+                for datos in datosDevueltos:
+                    self.tableWidget.setRowCount(fila + 1)
+
+                    self.tableWidget.setItem(fila, 0, QTableWidgetItem(str(datos[0])))
+                    self.tableWidget.setItem(fila, 1, QTableWidgetItem(str(datos[1])))
+                    self.tableWidget.setItem(fila, 2, QTableWidgetItem(str(datos[2])))
+                    self.tableWidget.setItem(fila, 3, QTableWidgetItem(str(datos[3])))
+                    self.tableWidget.setItem(fila, 4, QTableWidgetItem(str(datos[4])))
+
+                    fila += 1
+            else:
+                QMessageBox.information(self, "Buscar venta", "No se encontro "
+                                                                "información.   ", QMessageBox.Ok)
+        except:
+            pass
 
 
 class VentanaClienteNuevo(QMainWindow):
@@ -437,46 +533,66 @@ def agregarCliente(nombre, telefono):
 
 
 class VentanaProductos(QMainWindow):
-    def __init__(self, parent=None):
+    def __init__(self, numVenta, parent=None):
         super(VentanaProductos, self).__init__(parent)
         loadUi("ventanas\Productos.ui", self)
 
+        self.numVenta = numVenta
         self.lineEdit.setPlaceholderText("Nombre del producto")
         self.lineEdit.textChanged.connect(self.actualizarQuery)
 
-        self.modelo = QSqlQueryModel()
-        self.tableView.setModel(self.modelo)
-        self.tableView.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
-        self.tableView.horizontalHeader().setFont(QFont("ITC Avant Garde Std Bk Cn", 10, QFont.Bold))
-        self.tableView.horizontalHeader().setStretchLastSection(True)
+        self.tableWidget.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        self.tableWidget.horizontalHeader().setFont(QFont("ITC Avant Garde Std Bk Cn", 10, QFont.Bold))
 
+        delegateFloat = InitialDelegate(2, self.tableWidget)
+        self.tableWidget.setItemDelegateForColumn(2, delegateFloat)
+        self.tableWidget.setDragDropOverwriteMode(False)
+        self.tableWidget.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.tableWidget.setTextElideMode(Qt.ElideRight)
+        self.tableWidget.setWordWrap(False)
+        self.tableWidget.setSortingEnabled(False)
+        self.tableWidget.horizontalHeader().setDefaultAlignment(Qt.AlignHCenter | Qt.AlignVCenter |
+                                                              Qt.AlignCenter)
+        self.tableWidget.horizontalHeader().setHighlightSections(False)
+        self.tableWidget.horizontalHeader().setStretchLastSection(True)
+        self.tableWidget.verticalHeader().setVisible(False)
+        self.tableWidget.setAlternatingRowColors(True)
+        self.tableWidget.itemDoubleClicked.connect(self.agregaProducto)
 
-        self.query = QSqlQuery(db=dba)
-
-        self.query.prepare(
-            "SELECT idRefaccion, nombre, precio FROM Refaccion WHERE "
-            "nombre LIKE '%' || :nombreProducto || '%'"
-        )
         self.actualizarQuery()
 
-        delegateFloat = InitialDelegate(2, self.tableView)
-        self.tableView.setItemDelegateForColumn(1, delegateFloat)
-        self.modelo.setHeaderData(0, Qt.Horizontal, "Nombre")
-        self.modelo.setHeaderData(1, Qt.Horizontal, "Precio")
-        self.tableView.setSelectionBehavior(QTableView.SelectRows)
-        #self.tableView.hideColumn(0)
-        #self.btnAgregar.clicked.connect(self.agregaProducto)
-
     def agregaProducto(self):
+        print("Hola")
         pass
 
-
     def actualizarQuery(self):
-        nombreProducto = self.lineEdit.text()
-        self.query.bindValue(":nombreProducto", nombreProducto)
+        conexion = sqlite3.connect("puntoVenta.db")
+        consulta = conexion.cursor()
 
-        self.query.exec_()
-        self.modelo.setQuery(self.query)
+        dato = ("%"+self.lineEdit.text()+"%", )
+
+        sql = """SELECT idRefaccion, nombre, precio FROM Refaccion WHERE nombre LIKE ?"""
+
+        try:
+            consulta.execute(sql, dato)
+            datosDevueltos = consulta.fetchall()
+            conexion.close()
+
+            if datosDevueltos:
+                fila = 0
+                for datos in datosDevueltos:
+                    self.tableWidget.setRowCount(fila + 1)
+
+                    self.tableWidget.setItem(fila, 0, QTableWidgetItem(str(datos[0])))
+                    self.tableWidget.setItem(fila, 1, QTableWidgetItem(str(datos[1])))
+                    self.tableWidget.setItem(fila, 2, QTableWidgetItem(str(datos[2])))
+
+                    fila += 1
+            else:
+                QMessageBox.information(self, "Buscar venta", "No se encontro "
+                                                              "información.   ", QMessageBox.Ok)
+        except:
+            pass
 
 
 class VentanaRegistroProducto(QMainWindow):
@@ -484,7 +600,7 @@ class VentanaRegistroProducto(QMainWindow):
         super(VentanaRegistroProducto, self).__init__(parent)
         loadUi("ventanas\Registros.ui", self)
 
-        self.comboBox.addItems(["Seleccionar", "Unidades", "Metros", "Kilogramos", "Sin unidad"])
+        self.comboBox.addItems(["Unidades", "Metros", "Kilogramos"])
 
         self.pushButton_2.clicked.connect(self.cancelar)
         self.pushButton.clicked.connect(self.aceptar)
@@ -531,203 +647,45 @@ class InitialDelegate(QStyledItemDelegate):
             pass
 
 
-class VentanaEditarCliente(QMainWindow):
-    def __init__(self, parent=None):
-        super(VentanaEditarCliente, self).__init__(parent)
-        loadUi('ventanas\EditarCliente.ui', self)
+class VentanaDetalleRegistro(QMainWindow):
+    def __init__(self, id,  parent=None):
+        super(VentanaDetalleRegistro, self).__init__(parent)
+        loadUi("ventanas\DetalleVenta.ui", self)
 
-        self.btn.setIconSize(QSize(40, 30))
-        self.btn.setIcon(QIcon('iconos/busqueda.ico'))
-        self.btn.setToolTip("Buscar")
-        self.btn.clicked.connect(self.buscar)
-
-        self.btn_2.clicked.connect(self.editar)
-
-        self.btn_3.clicked.connect(self.cancelar)
-
-        self.le.setPlaceholderText("Id cliente")
-
-    def buscar(self):
-        self.le_2.setText("")
-        self.le_4.setText("")
-        id = self.le.text()
-        datos = busqueda(id)
-        self.le_2.setText(datos[0])
-        self.le_4.setText(datos[1])
-
-    def editar(self):
-        id = int(self.le.text())
-        nombre = self.le_2.text()
-        telefono = self.le_4.text()
-        editarCliente(id, nombre, telefono)
-        self.hide()
-
-    def cancelar(self):
-        self.hide()
+        self.id = id
+        delegateFloat = InitialDelegate(2, self.tableView)
+        self.tableView.setItemDelegateForColumn(4, delegateFloat)
+        self.modelo = QSqlQueryModel()
+        self.tableView.setModel(self.modelo)
+        self.tableView.setDragDropOverwriteMode(False)
+        self.tableView.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.tableView.setTextElideMode(Qt.ElideRight)
+        self.tableView.setWordWrap(False)
+        self.tableView.setSortingEnabled(False)
+        self.tableView.horizontalHeader().setDefaultAlignment(Qt.AlignHCenter | Qt.AlignVCenter |
+                                                          Qt.AlignCenter)
+        self.tableView.horizontalHeader().setHighlightSections(False)
+        self.tableView.horizontalHeader().setStretchLastSection(True)
+        self.tableView.verticalHeader().setVisible(False)
+        self.tableView.setAlternatingRowColors(True)
 
 
-def busqueda(id):
-    conexion = sqlite3.connect('puntoVenta.db')
-    consulta = conexion.cursor()
-    datos = ("", "")
-    sql = """SELECT nombre, telefono FROM Cliente WHERE (idCliente = ?)"""
-    encontro = False
-    try:
-        consulta.execute(sql, id)
-        for i in consulta:
-            datos = (i[0], i[1])
-            encontro = True
-        if encontro == False:
-            msg = QMessageBox()
-            msg.setIcon(QMessageBox.Information)
-            msg.setText("Registro no encontrado")
-            msg.setWindowIcon(QIcon('iconos/m.ico'))
-            msg.setWindowTitle(" ")
-            msg.setStandardButtons(QMessageBox.Ok)
-            msg.exec_()
-        return datos
-    except:
-        print("")
-    conexion.close()
+        self.query = QSqlQuery(db=dba)
 
+        self.query.prepare(
+            "SELECT idConcepto, Refaccion.nombre, Concepto.cantidad, Refaccion.precio, importe FROM Concepto "
+            "INNER JOIN Refaccion ON Refaccion.idRefaccion = Concepto.refaccion "
+            "INNER JOIN Venta ON Venta.numVenta = Concepto.numVenta "
+            "WHERE Venta.numVenta = :numVenta"
+        )
+        self.actualizarQuery()
 
-def editarCliente(id, nombre, telefono):
-    conexion = sqlite3.connect('puntoVenta.db')
-    consulta = conexion.cursor()
-    datos = (nombre, telefono, id)
-    sql = """UPDATE Cliente SET nombre = ?, telefono = ? WHERE (idCliente = ?)"""
-    consulta.execute(sql, datos)
-    conexion.commit()
-    conexion.close()
+    def actualizarQuery(self):
+        numVenta = self.id
+        self.query.bindValue(":numVenta", numVenta)
 
-
-class VentanaBorrarCliente(QMainWindow):
-    def __init__(self, parent=None):
-        super(VentanaBorrarCliente, self).__init__(parent)
-        loadUi('ventanas\BorrarCliente.ui', self)
-
-        self.btn.setIconSize(QSize(40, 30))
-        self.btn.setIcon(QIcon('iconos/busqueda.ico'))
-        self.btn.setToolTip("Buscar")
-        self.btn.clicked.connect(self.buscar)
-
-        self.btn_2.clicked.connect(self.borrar)
-
-        self.btn_3.clicked.connect(self.cancelar)
-
-        self.le.setPlaceholderText("Id cliente")
-
-
-    def buscar(self):
-        self.le_2.setText("")
-        self.le_4.setText("")
-        id = self.le.text()
-        datos = busqueda(id)
-        self.le_2.setText(datos[0])
-        self.le_4.setText(datos[1])
-
-
-    def borrar(self):
-        id = self.le.text()
-        borrarCliente(id)
-        self.hide()
-
-
-    def cancelar(self):
-        self.hide()
-
-
-def borrarCliente(id):
-    conexion = sqlite3.connect('puntoVenta.db')
-    consulta = conexion.cursor()
-
-    sql = """DELETE FROM Cliente WHERE (idCliente = ?)"""
-    consulta.execute(sql, id)
-    conexion.commit()
-    conexion.close()
-
-
-class VentanaEditarProducto(QMainWindow):
-    def __init__(self, parent=None):
-        super(VentanaEditarProducto, self).__init__(parent)
-        loadUi('ventanas\EditarProducto.ui', self)
-
-        self.le.setPlaceholderText("Id producto")
-
-        self.comboBox_2.addItems(["Seleccionar", "Unidades", "Metros", "Kilogramos", "Sin unidad"])
-
-        self.btn.setIconSize(QSize(40, 30))
-        self.btn.setIcon(QIcon('iconos/busqueda.ico'))
-        self.btn.setToolTip("Buscar")
-        self.btn.clicked.connect(self.buscar)
-
-        #self.btn_2.clicked.connect(self.borrar)
-
-        #self.btn_3.clicked.connect(self.cancelar)
-
-    def buscar(self):
-        self.le.setFocus()
-        self.le_3.setText("")
-        self.le_5.setText("")
-        self.spinBox_2.setValue(0)
-        count = self.comboBox_2.count()
-        for i in range(count):
-            text = self.comboBox_2.itemText(i)
-            if text == "Seleccionar":
-                break
-        index = self.comboBox_2.findText(text)
-        self.comboBox_2.itemText(index)
-        id = self.le.text()
-        datos = busqueda2(id)
-        self.le_3.setText(datos[0])
-        self.le_5.setText(datos[1])
-        self.spinBox_2.setValue(datos[2])
-        text = datos[3]
-        inde = self.comboBox_2.findText(text)
-        self.comboBox_2.itemText(inde)
-
-
-class VentanaBorrarProducto(QMainWindow):
-    def __init__(self, parent=None):
-        super(VentanaBorrarProducto, self).__init__(parent)
-        loadUi('ventanas\BorrarProducto.ui', self)
-
-        self.le.setPlaceholderText("Id producto")
-
-        self.comboBox_2.addItems(["Seleccionar", "Unidades", "Metros", "Kilogramos", "Sin unidad"])
-
-        self.btn.setIconSize(QSize(40, 30))
-        self.btn.setIcon(QIcon('iconos/busqueda.ico'))
-        self.btn.setToolTip("Buscar")
-        self.btn.clicked.connect(self.buscar)
-
-    def buscar(self):
-        pass
-
-
-def busqueda2(id):
-    conexion = sqlite3.connect('puntoVenta.db')
-    consulta = conexion.cursor()
-    datos = ("", "", "", "")
-    sql = """SELECT nombre, precio, cantidad, uniMedida FROM Refaccion WHERE (idRefaccion = ?)"""
-    encontro = False
-    try:
-        consulta.execute(sql, id)
-        for i in consulta:
-            datos = (i[0], i[1], i[2], i[3])
-            encontro = True
-        if encontro == False:
-            msg = QMessageBox()
-            msg.setIcon(QMessageBox.Information)
-            msg.setText("Registro no encontrado")
-            msg.setWindowIcon(QIcon('iconos/m.ico'))
-            msg.setWindowTitle(" ")
-            msg.setStandardButtons(QMessageBox.Ok)
-            msg.exec_()
-        return datos
-    except:
-        print("")
-    conexion.close()
+        self.query.exec_()
+        self.modelo.setQuery(self.query)
 
 
 app = QApplication(sys.argv)
