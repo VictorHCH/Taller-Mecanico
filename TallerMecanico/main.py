@@ -752,8 +752,8 @@ class VentanaDetalleRegistro(QMainWindow):
 
         self.id = id
         delegateFloat = InitialDelegate(2, self.tableView)
-        self.tableView.setItemDelegateForColumn(3, delegateFloat)
         self.tableView.setItemDelegateForColumn(4, delegateFloat)
+        self.tableView.setItemDelegateForColumn(5, delegateFloat)
         self.modelo = QSqlQueryModel()
         self.tableView.setModel(self.modelo)
         self.tableView.setDragDropOverwriteMode(False)
@@ -764,16 +764,17 @@ class VentanaDetalleRegistro(QMainWindow):
         self.tableView.horizontalHeader().setDefaultAlignment(Qt.AlignHCenter | Qt.AlignVCenter |
                                                           Qt.AlignCenter)
         self.tableView.horizontalHeader().setHighlightSections(False)
+        self.tableView.verticalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
         self.tableView.horizontalHeader().setStretchLastSection(True)
         self.tableView.verticalHeader().setVisible(False)
         self.tableView.setAlternatingRowColors(True)
-        self.tableView.horizontalHeader().setFont(QFont("Franklin Gothic Book", 11, QFont.Bold))
+        self.tableView.horizontalHeader().setFont(QFont("Franklin Gothic Book", 9, QFont.Bold))
 
 
         self.query = QSqlQuery(db=dba)
 
         self.query.prepare(
-            "SELECT idConcepto, Refaccion.nombre, Concepto.cantidad, Refaccion.precio, importe FROM Concepto "
+            "SELECT idConcepto, Refaccion.nombre, Concepto.cantidad, Refaccion.uniMedida, Refaccion.precio, importe FROM Concepto "
             "INNER JOIN Refaccion ON Refaccion.idRefaccion = Concepto.refaccion "
             "INNER JOIN Venta ON Venta.numVenta = Concepto.numVenta "
             "WHERE Venta.numVenta = :numVenta"
@@ -783,8 +784,9 @@ class VentanaDetalleRegistro(QMainWindow):
         self.modelo.setHeaderData(0, Qt.Horizontal, "Id concepto")
         self.modelo.setHeaderData(1, Qt.Horizontal, "Nombre")
         self.modelo.setHeaderData(2, Qt.Horizontal, "Cantidad")
-        self.modelo.setHeaderData(3, Qt.Horizontal, "Precio")
-        self.modelo.setHeaderData(4, Qt.Horizontal, "Importe")
+        self.modelo.setHeaderData(3, Qt.Horizontal, "Unidad de\nmedida")
+        self.modelo.setHeaderData(4, Qt.Horizontal, "Precio unitario")
+        self.modelo.setHeaderData(5, Qt.Horizontal, "Importe")
 
     def actualizarQuery(self):
         numVenta = self.id
@@ -814,12 +816,36 @@ class VentanaAgregarProducto(QMainWindow):
         cantidad = int(self.leCantidad.text())
         precio = float(self.lePrecio.text())
         importe = float(cantidad * precio)
-        datos = (cantidad, importe, self.idPro, self.idVen)
-        sql = """INSERT INTO Concepto (cantidad, importe, refaccion, numVenta) VALUES (?,?,?,?)"""
+        #Consulta de cantidad
+        dato = (str(self.idPro), )
+        sql = """SELECT cantidad FROM Refaccion WHERE idRefaccion = ?"""
+        self.cantidadT = 0
+        consulta.execute(sql, dato)
+        datosDevueltos = consulta.fetchall()
+        if datosDevueltos:
+            for datos in datosDevueltos:
+                self.cantidadT = int(datos[0])
 
-        consulta.execute(sql, datos)
-        conexion.commit()
-        conexion.close()
+        #Actualizar cantidad
+        if cantidad <= self.cantidadT:
+            cantidadR = self.cantidadT - cantidad
+
+            datos = (int(cantidadR), str(self.idPro))
+
+            sql = """UPDATE Refaccion SET cantidad = ? WHERE idRefaccion = ?"""
+            consulta.execute(sql, datos)
+            conexion.commit()
+
+            #Cargar concepto
+            datos = (cantidad, importe, self.idPro, self.idVen)
+
+            sql = """INSERT INTO Concepto (cantidad, importe, refaccion, numVenta) VALUES (?,?,?,?)"""
+
+            consulta.execute(sql, datos)
+            conexion.commit()
+            conexion.close()
+        else:
+            msg = QMessageBox.critical(self, "Aviso", "Cantidad insuficiente.\nSólo se cuenta con " + str(self.cantidadT) + " producto(s).", buttons=QMessageBox.Ok)
         self.close()
 
     def producto(self):

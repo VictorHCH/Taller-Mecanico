@@ -344,7 +344,7 @@ color: rgb(206, 18, 18);</string>
      <property name="font">
       <font>
        <family>Franklin Gothic Book</family>
-       <pointsize>9</pointsize>
+       <pointsize>8</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
