@@ -577,28 +577,23 @@ class VentanaRegistros(QMainWindow):
 
         sql = """SELECT Venta.numVenta, nombre, Venta.vehiculo, Venta.fecha, Venta.total FROM Cliente INNER JOIN Venta ON Venta.cliente = Cliente.idCliente
         WHERE Cliente.nombre LIKE ? AND Venta.fecha LIKE ?"""
-        try:
-            consulta.execute(sql, dato)
-            datosDevueltos = consulta.fetchall()
-            conexion.close()
 
-            if datosDevueltos:
-                fila = 0
-                for datos in datosDevueltos:
-                    self.tableWidget.setRowCount(fila + 1)
+        consulta.execute(sql, dato)
+        datosDevueltos = consulta.fetchall()
+        conexion.close()
 
-                    self.tableWidget.setItem(fila, 0, QTableWidgetItem(str(datos[0])))
-                    self.tableWidget.setItem(fila, 1, QTableWidgetItem(str(datos[1])))
-                    self.tableWidget.setItem(fila, 2, QTableWidgetItem(str(datos[2])))
-                    self.tableWidget.setItem(fila, 3, QTableWidgetItem(str(datos[3])))
-                    self.tableWidget.setItem(fila, 4, QTableWidgetItem(str(datos[4])))
+        if datosDevueltos:
+            fila = 0
+            for datos in datosDevueltos:
+                self.tableWidget.setRowCount(fila + 1)
 
-                    fila += 1
-            else:
-                QMessageBox.information(self, "Buscar venta", "No se encontro "
-                                                                "información.   ", QMessageBox.Ok)
-        except:
-            pass
+                self.tableWidget.setItem(fila, 0, QTableWidgetItem(str(datos[0])))
+                self.tableWidget.setItem(fila, 1, QTableWidgetItem(str(datos[1])))
+                self.tableWidget.setItem(fila, 2, QTableWidgetItem(str(datos[2])))
+                self.tableWidget.setItem(fila, 3, QTableWidgetItem(str(datos[3])))
+                self.tableWidget.setItem(fila, 4, QTableWidgetItem(str(datos[4])))
+
+                fila += 1
 
 
 class VentanaClienteNuevo(QMainWindow):
