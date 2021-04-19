@@ -130,7 +130,7 @@ class VentanaVenta(QMainWindow):
         # Tabla Conceptos
         delegateFloat = InitialDelegate(2, self.twConcepto)
         self.twConcepto.setItemDelegateForColumn(4, delegateFloat)
-        self.twConcepto.setItemDelegateForColumn(2, delegateFloat)
+        self.twConcepto.setItemDelegateForColumn(5, delegateFloat)
         self.twConcepto.setDragDropOverwriteMode(False)
         self.twConcepto.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.twConcepto.setTextElideMode(Qt.ElideRight)
@@ -325,7 +325,7 @@ class VentanaVenta(QMainWindow):
         idVen = int(self.numVenta)
         dato = (idVen, )
 
-        sql = """SELECT idConcepto, Refaccion.nombre, Refaccion.precio, Concepto.cantidad, importe FROM Concepto INNER JOIN Refaccion ON Refaccion.idRefaccion = Concepto.refaccion
+        sql = """SELECT idConcepto, Refaccion.nombre, Concepto.cantidad, Refaccion.uniMedida, Refaccion.precio, importe FROM Concepto INNER JOIN Refaccion ON Refaccion.idRefaccion = Concepto.refaccion
                 INNER JOIN Venta ON Venta.numVenta = Concepto.numVenta WHERE Venta.numVenta = ?"""
         try:
             consulta.execute(sql, dato)
@@ -342,6 +342,7 @@ class VentanaVenta(QMainWindow):
                     self.twConcepto.setItem(fila, 2, QTableWidgetItem(str(datos[2])))
                     self.twConcepto.setItem(fila, 3, QTableWidgetItem(str(datos[3])))
                     self.twConcepto.setItem(fila, 4, QTableWidgetItem(str(datos[4])))
+                    self.twConcepto.setItem(fila, 5, QTableWidgetItem(str(datos[5])))
 
                     fila += 1
         except:
