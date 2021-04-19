@@ -32,7 +32,7 @@
     </property>
     <property name="font">
      <font>
-      <family>ITC Avant Garde Std Bk Cn</family>
+      <family>Franklin Gothic Book</family>
       <pointsize>10</pointsize>
       <weight>75</weight>
       <bold>true</bold>

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>800</width>
-    <height>600</height>
+    <height>732</height>
    </rect>
   </property>
   <property name="font">
@@ -29,15 +29,15 @@
    <widget class="QLabel" name="label_4">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>190</y>
+      <x>40</x>
+      <y>250</y>
       <width>94</width>
-      <height>22</height>
+      <height>31</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <family>ITC Avant Garde Std Bk Cn</family>
+      <family>Franklin Gothic Book</family>
       <pointsize>11</pointsize>
       <weight>75</weight>
       <bold>true</bold>
@@ -47,22 +47,22 @@
      <string>Conceptos</string>
     </property>
     <property name="alignment">
-     <set>Qt::AlignCenter</set>
+     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
     </property>
    </widget>
    <widget class="QLineEdit" name="leCliente">
     <property name="geometry">
      <rect>
-      <x>11</x>
-      <y>14</y>
+      <x>150</x>
+      <y>50</y>
       <width>341</width>
-      <height>27</height>
+      <height>31</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <family>ITC Avant Garde Std Bk Cn</family>
-      <pointsize>10</pointsize>
+      <family>Franklin Gothic Book</family>
+      <pointsize>11</pointsize>
      </font>
     </property>
     <property name="styleSheet">
@@ -72,15 +72,15 @@
    <widget class="QPushButton" name="btn">
     <property name="geometry">
      <rect>
-      <x>370</x>
-      <y>10</y>
-      <width>93</width>
-      <height>33</height>
+      <x>509</x>
+      <y>50</y>
+      <width>41</width>
+      <height>31</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <family>ITC Avant Garde Std Bk Cn</family>
+      <family>Franklin Gothic Book</family>
       <pointsize>12</pointsize>
       <weight>75</weight>
       <bold>true</bold>
@@ -91,21 +91,21 @@
 color: rgb(206, 18, 18);</string>
     </property>
     <property name="text">
-     <string>+</string>
+     <string/>
     </property>
    </widget>
    <widget class="QPushButton" name="btnConcepto">
     <property name="geometry">
      <rect>
-      <x>120</x>
-      <y>180</y>
-      <width>93</width>
-      <height>33</height>
+      <x>150</x>
+      <y>250</y>
+      <width>41</width>
+      <height>31</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <family>ITC Avant Garde Std Bk Cn</family>
+      <family>Franklin Gothic Book</family>
       <pointsize>12</pointsize>
       <weight>75</weight>
       <bold>true</bold>
@@ -116,21 +116,21 @@ color: rgb(206, 18, 18);</string>
 color: rgb(206, 18, 18);</string>
     </property>
     <property name="text">
-     <string>+</string>
+     <string/>
     </property>
    </widget>
    <widget class="QLabel" name="label_5">
     <property name="geometry">
      <rect>
-      <x>570</x>
-      <y>530</y>
+      <x>560</x>
+      <y>640</y>
       <width>81</width>
       <height>22</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <family>ITC Avant Garde Std Bk Cn</family>
+      <family>Franklin Gothic Book</family>
       <pointsize>11</pointsize>
       <weight>75</weight>
       <bold>true</bold>
@@ -146,15 +146,15 @@ color: rgb(206, 18, 18);</string>
    <widget class="QLabel" name="leTotal">
     <property name="geometry">
      <rect>
-      <x>649</x>
-      <y>530</y>
+      <x>639</x>
+      <y>640</y>
       <width>121</width>
       <height>22</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <family>ITC Avant Garde Std Bk Cn</family>
+      <family>Franklin Gothic Book</family>
       <pointsize>11</pointsize>
       <weight>75</weight>
       <bold>true</bold>
@@ -170,16 +170,16 @@ color: rgb(206, 18, 18);</string>
    <widget class="QLineEdit" name="leVehiculo">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>140</y>
+      <x>149</x>
+      <y>190</y>
       <width>341</width>
-      <height>27</height>
+      <height>31</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <family>ITC Avant Garde Std Bk Cn</family>
-      <pointsize>10</pointsize>
+      <family>Franklin Gothic Book</family>
+      <pointsize>11</pointsize>
      </font>
     </property>
     <property name="styleSheet">
@@ -189,15 +189,16 @@ color: rgb(206, 18, 18);</string>
    <widget class="QPushButton" name="btnVenta">
     <property name="geometry">
      <rect>
-      <x>650</x>
-      <y>560</y>
-      <width>126</width>
+      <x>230</x>
+      <y>690</y>
+      <width>141</width>
       <height>28</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>9</pointsize>
+      <family>Franklin Gothic Book</family>
+      <pointsize>11</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -213,11 +214,20 @@ color: rgb(206, 18, 18);</string>
    <widget class="QTableWidget" name="twCliente">
     <property name="geometry">
      <rect>
-      <x>11</x>
-      <y>41</y>
+      <x>150</x>
+      <y>81</y>
       <width>341</width>
       <height>81</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Franklin Gothic Book</family>
+      <pointsize>11</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 255, 255);</string>
     </property>
     <column>
      <property name="text">
@@ -236,15 +246,15 @@ color: rgb(206, 18, 18);</string>
    <widget class="QPushButton" name="btnBorrar">
     <property name="geometry">
      <rect>
-      <x>230</x>
-      <y>180</y>
-      <width>93</width>
-      <height>33</height>
+      <x>210</x>
+      <y>250</y>
+      <width>41</width>
+      <height>31</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <family>ITC Avant Garde Std Bk Cn</family>
+      <family>Franklin Gothic Book</family>
       <pointsize>12</pointsize>
       <weight>75</weight>
       <bold>true</bold>
@@ -255,24 +265,41 @@ color: rgb(206, 18, 18);</string>
 color: rgb(206, 18, 18);</string>
     </property>
     <property name="text">
-     <string>-</string>
+     <string/>
     </property>
    </widget>
    <widget class="QTableWidget" name="twConcepto">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>220</y>
-      <width>781</width>
+      <x>40</x>
+      <y>310</y>
+      <width>721</width>
       <height>301</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Franklin Gothic Book</family>
+      <pointsize>11</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 255, 255);</string>
     </property>
     <property name="editTriggers">
      <set>QAbstractItemView::NoEditTriggers</set>
     </property>
     <column>
      <property name="text">
-      <string>#</string>
+      <string>Id concepto</string>
+     </property>
+     <property name="font">
+      <font>
+       <family>Franklin Gothic Book</family>
+       <pointsize>10</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
      </property>
      <property name="textAlignment">
       <set>AlignCenter</set>
@@ -282,13 +309,29 @@ color: rgb(206, 18, 18);</string>
      <property name="text">
       <string>Nombre</string>
      </property>
+     <property name="font">
+      <font>
+       <family>Franklin Gothic Book</family>
+       <pointsize>10</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
      <property name="textAlignment">
       <set>AlignCenter</set>
      </property>
     </column>
     <column>
      <property name="text">
-      <string>Precio Unitario</string>
+      <string>Precio unitario</string>
+     </property>
+     <property name="font">
+      <font>
+       <family>Franklin Gothic Book</family>
+       <pointsize>10</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
      </property>
      <property name="textAlignment">
       <set>AlignCenter</set>
@@ -298,6 +341,14 @@ color: rgb(206, 18, 18);</string>
      <property name="text">
       <string>Cantidad</string>
      </property>
+     <property name="font">
+      <font>
+       <family>Franklin Gothic Book</family>
+       <pointsize>10</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
      <property name="textAlignment">
       <set>AlignCenter</set>
      </property>
@@ -305,6 +356,14 @@ color: rgb(206, 18, 18);</string>
     <column>
      <property name="text">
       <string>Importe</string>
+     </property>
+     <property name="font">
+      <font>
+       <family>Franklin Gothic Book</family>
+       <pointsize>10</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
      </property>
      <property name="textAlignment">
       <set>AlignCenter</set>
@@ -314,15 +373,16 @@ color: rgb(206, 18, 18);</string>
    <widget class="QPushButton" name="btnCancelar">
     <property name="geometry">
      <rect>
-      <x>510</x>
-      <y>560</y>
-      <width>126</width>
+      <x>390</x>
+      <y>690</y>
+      <width>141</width>
       <height>28</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>9</pointsize>
+      <family>Franklin Gothic Book</family>
+      <pointsize>11</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -338,15 +398,15 @@ color: rgb(206, 18, 18);</string>
    <widget class="QPushButton" name="btnActualizar">
     <property name="geometry">
      <rect>
-      <x>340</x>
-      <y>180</y>
-      <width>93</width>
-      <height>33</height>
+      <x>270</x>
+      <y>250</y>
+      <width>41</width>
+      <height>31</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <family>ITC Avant Garde Std Bk Cn</family>
+      <family>Franklin Gothic Book</family>
       <pointsize>12</pointsize>
       <weight>75</weight>
       <bold>true</bold>
@@ -357,21 +417,21 @@ color: rgb(206, 18, 18);</string>
 color: rgb(206, 18, 18);</string>
     </property>
     <property name="text">
-     <string>Agregar</string>
+     <string/>
     </property>
    </widget>
    <widget class="QPushButton" name="btnRegresa">
     <property name="geometry">
      <rect>
-      <x>660</x>
-      <y>30</y>
-      <width>91</width>
+      <x>730</x>
+      <y>10</y>
+      <width>51</width>
       <height>41</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <family>ITC Avant Garde Std Bk Cn</family>
+      <family>Franklin Gothic Book</family>
       <pointsize>12</pointsize>
       <weight>75</weight>
       <bold>true</bold>
@@ -382,7 +442,55 @@ color: rgb(206, 18, 18);</string>
 color: rgb(206, 18, 18);</string>
     </property>
     <property name="text">
-     <string>Regresa</string>
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_6">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>50</y>
+      <width>94</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Franklin Gothic Book</family>
+      <pointsize>11</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>Cliente</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_7">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>190</y>
+      <width>94</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Franklin Gothic Book</family>
+      <pointsize>11</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>Vehículo</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
     </property>
    </widget>
   </widget>
